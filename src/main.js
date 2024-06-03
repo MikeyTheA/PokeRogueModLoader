@@ -15,10 +15,6 @@ function STATIC(key, init) {
     return value;
 }
 
-const HookTypes = ['Phase', 'Handler'];
-
-const HookPhaseTypes = ['Function/Pre', 'Function/Post'];
-
 async function main() {
     await ImGui.default();
     const canvas = document.getElementById('output');
@@ -50,7 +46,6 @@ async function main() {
     addWindow('Phase Spy', false, showPhaseSpyWindow);
     addWindow('UI Handler Viewer', false, showUiHandlerSpyWindow);
     addWindow('New Mod', false, showNewModWindow, true);
-    addWindow('New Hook', false, showNewHookWindow, true);
 
     let Mods = {};
 
@@ -236,42 +231,7 @@ async function main() {
                         }
                         ImGui.EndTabItem();
                     }
-                    if (ImGui.BeginTabItem('Hooks##ModList')) {
-                        ImGui.BeginChild('hooks##ModList', new ImGui.Vec2(0, -ImGui.GetFrameHeightWithSpacing()), true);
-
-                        if (Mods[selected.value].hooks) {
-                            const Hooks = [[[], []], {}];
-
-                            Mods[selected.value].hooks.forEach((hook) => {
-                                if (hook.type === 0) {
-                                    Hooks[hook.type][hook.phaseType].push(hook);
-                                }
-                            });
-
-                            const phaseHooks = Hooks[0];
-                            if (Object.values(phaseHooks).some((hookArray) => hookArray.length > 0)) {
-                                if (ImGui.TreeNode('Phase Hooks')) {
-                                    renderHookTree('Function/Pre', phaseHooks[0], selected);
-                                    renderHookTree('Function/Post', phaseHooks[1], selected);
-                                    ImGui.TreePop();
-                                }
-                            }
-                        }
-
-                        ImGui.EndChild();
-
-                        ImGui.BeginChild('hooksbuttons##ModList', new ImGui.Vec2(140, 0));
-                        if (ImGui.Button('New##ModListHooks')) {
-                            console.log(selected.value);
-                            const newhookmodbuf = STATIC('newhookmod#ModListNewHook', selected.value);
-                            newhookmodbuf.value = selected.value;
-                            Windows['New Hook'].open.value = true;
-                        }
-                        ImGui.EndChild();
-
-                        ImGui.EndTabItem();
-                    }
-                    if (ImGui.BeginTabItem('UI##ModList')) {
+                    if (ImGui.BeginTabItem('Scripts##ModList')) {
                         ImGui.EndTabItem();
                     }
                     if (ImGui.BeginTabItem('Logs##ModList')) {
@@ -368,83 +328,6 @@ async function main() {
         ImGui.EndGroup();
     }
 
-    function showNewHookWindow() {
-        const error = STATIC('error#NewHook', undefined);
-        const hooknamebuf = STATIC('newhookname#NewHook', 'Free rerolls');
-        ImGui.InputText('Name##NewHook', hooknamebuf.access, 256);
-        const hooktoggleablebuf = STATIC('newhooktoggleable#NewHook', true);
-        const hooktypebuf = STATIC('newhooktype#NewHook', 0);
-        const hookphasetypebuf = STATIC('newhookphasetype#NewHook', 0);
-        const phasenamebuf = STATIC('phasehookname#NewHook', 'SelectStarterPhase');
-        ImGui.Checkbox('Toggleable##NewHook', hooktoggleablebuf.access, 256);
-        ImGui.BeginTabBar('##NewHook', ImGui.TabBarFlags.None);
-        if (ImGui.BeginTabItem('Phase Hook##NewHook')) {
-            hooktypebuf.value = 0;
-            ImGui.InputText('Phase##NewHook', phasenamebuf.access, 256);
-            ImGui.BeginChild('phasetypes##NewHook', new ImGui.Vec2(0, -ImGui.GetFrameHeightWithSpacing()), true);
-            if (ImGui.Selectable('Function/Pre##NewHook', hookphasetypebuf.value === 0)) {
-                hookphasetypebuf.value = 0;
-            }
-            if (ImGui.Selectable('Function/Post##NewHook', hookphasetypebuf.value === 1)) {
-                hookphasetypebuf.value = 1;
-            }
-            ImGui.EndChild();
-            ImGui.EndTabItem();
-        }
-        if (ImGui.BeginTabItem('Handler Hook##NewHook')) {
-            hooktypebuf.value = 1;
-            ImGui.EndTabItem();
-        }
-        ImGui.EndTabBar();
-        ImGui.BeginChild('buttons row##NewHook', new ImGui.Vec2(0, 0), false);
-        if (ImGui.Button('Cancel##NewMod')) {
-            Windows['New Hook'].open.value = false;
-        }
-        ImGui.SameLine();
-        if (ImGui.Button('Create##NewHook')) {
-            const newhookmodbuf = STATIC('newhookmod#ModListNewHook', undefined);
-            if (newhookmodbuf.value !== undefined) {
-                let found = false;
-                Mods[newhookmodbuf.value].hooks.forEach((hook) => {
-                    if (hook.name === hooknamebuf.value) {
-                        error.value = 'Hook with the same name already exists!';
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    let newhook = {};
-                    if (hooktypebuf.value === 0) {
-                        newhook = {
-                            name: hooknamebuf.value,
-                            toggleable: hooktoggleablebuf.value,
-                            type: hooktypebuf.value,
-                            phase: phasenamebuf.value,
-                            phaseType: hookphasetypebuf.value,
-                        };
-                    } else {
-                        newhook = {
-                            name: hooknamebuf.value,
-                            toggleable: hooktoggleablebuf.value,
-                            type: hooktypebuf.value,
-                        };
-                    }
-
-                    const hooks = Mods[newhookmodbuf.value].hooks || [];
-                    hooks.push(newhook);
-                    Mods[newhookmodbuf.value].hooks = hooks;
-                    Windows['New Hook'].open.value = false;
-                    error.value = undefined;
-                }
-            }
-            save();
-        }
-        if (error.value) {
-            ImGui.SameLine();
-            ImGui.TextColored(new ImGui.Vec4(1, 0, 0, 1), error.value);
-        }
-        ImGui.EndChild();
-    }
-
     function showPhaseSpyWindow() {
         const selected = STATIC('selected#PhaseSpy', undefined);
         const spied = STATIC('spied#PhaseSpy', []);
@@ -531,29 +414,6 @@ async function main() {
             }
         }
     }
-
-    const renderHookTree = (hookType, hooks, selected) => {
-        if (hooks.length > 0) {
-            if (ImGui.TreeNode(hookType)) {
-                hooks.forEach((hook) => {
-                    const label = `${hook.name}`;
-                    const toggled = STATIC(`toggled${Mods[selected.value].name}${hook.name}#ModListHooks`, true);
-                    if (hook.toggleable) {
-                        ImGui.Checkbox(label, toggled.access);
-                    } else {
-                        ImGui.Text(label);
-                    }
-                    ImGui.SameLine();
-                    if (ImGui.Button(`Delete##${hook.name}`)) {
-                        const hookIndex = Mods[selected.value].hooks.indexOf(hook);
-                        Mods[selected.value].hooks.splice(hookIndex, 1);
-                        save();
-                    }
-                });
-                ImGui.TreePop();
-            }
-        }
-    };
 }
 
 main();
