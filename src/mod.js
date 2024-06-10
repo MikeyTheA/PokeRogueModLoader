@@ -7,7 +7,7 @@ class ModsHandler {
     }
 
     newMod(data) {
-        const mod = new Mod(data, this.data, this.addWindow, this.Window);
+        const mod = new Mod(data, this.data, this.addWindow, this.Windows);
         this.mods.push(mod);
     }
 
