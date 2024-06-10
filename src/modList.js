@@ -9,9 +9,18 @@ function showModList(env) {
 
         ImGui.BeginChild('ModSelectorPane##ModList', new ImGui.Vec2(140, -ImGui.GetFrameHeightWithSpacing()), true);
 
-        mods.mods.forEach((mod) => {
+        mods.mods.forEach((mod, modorder) => {
             if (ImGui.Selectable(`${mod.name}##ModIdSelectable${mod.id}`, selectedModId === mod.id)) {
                 data.setData(`selectedModId`, mod.id, false);
+            }
+            if (ImGui.IsItemActive() && !ImGui.IsItemHovered()) {
+                let n_next = modorder + (ImGui.GetMouseDragDelta(0).y < 0 ? -1 : 1);
+                if (n_next >= 0 && n_next < ImGui.ARRAYSIZE(mods.mods)) {
+                    mods.mods[modorder] = mods.mods[n_next];
+                    mods.mods[n_next] = mod;
+                    ImGui.ResetMouseDragDelta();
+                    mods.save()
+                }
             }
         });
 
@@ -217,7 +226,7 @@ function showEditScript(env) {
     if (ImGui.BeginPopupModal('Delete Script?', null, ImGui.WindowFlags.AlwaysAutoResize)) {
         ImGui.Text('Are you sure you want to delete this script?');
         if (ImGui.Button('Yes')) {
-            script.delete()
+            script.delete();
             mods.save();
             data.setData('Edit script Window', false, false);
             ImGui.CloseCurrentPopup();
