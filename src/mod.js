@@ -12,7 +12,11 @@ class ModsHandler {
     }
 
     deleteMod(id) {
-        this.mods = this.mods.filter(mod => mod.id !== id);
+        const mod = this.getMod(id);
+        if (mod) {
+            mod.scripts.forEach(script => script.delete());
+            this.mods = this.mods.filter(mod => mod.id !== id);
+        }
     }
 
     getMod(id) {
