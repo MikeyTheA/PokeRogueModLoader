@@ -23,9 +23,18 @@ const observer = new MutationObserver(async (mutations, observer) => {
         };
 
         // Load scripts in sequence
+        // gotta make it loop through libs and then src and then finally load main.js
         await loadScript(chrome.runtime.getURL('lib/imgui.umd.js'));
         await loadScript(chrome.runtime.getURL('lib/imgui_impl.umd.js'));
         await loadScript(chrome.runtime.getURL('lib/lz-string.min.js'));
+        await loadScript(chrome.runtime.getURL('lib/uuid.min.js'));
+        await loadScript(chrome.runtime.getURL('lib/prism.js'));
+
+        await loadScript(chrome.runtime.getURL('src/data.js'));
+        await loadScript(chrome.runtime.getURL('src/sandbox.js'));
+        await loadScript(chrome.runtime.getURL('src/mod.js'));
+        await loadScript(chrome.runtime.getURL('src/mainMenu.js'));
+        await loadScript(chrome.runtime.getURL('src/modList.js'));
         await loadScript(chrome.runtime.getURL('src/main.js'));
     }
 });
