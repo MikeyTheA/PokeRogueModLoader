@@ -5,6 +5,7 @@ class Static {
     constructor(value, saveCallback = null) {
         this.value = value;
         this.saveCallback = saveCallback;
+        this.listeners = {};
     }
 
     access = (value = this.value) => {
@@ -13,10 +14,27 @@ class Static {
         if (changed && this.saveCallback) {
             this.saveCallback(this.value);
         }
+        if (changed) {
+            this.notifyListeners();
+        }
         return this.value;
+    };
+
+    addListener(listener, id = 0) {
+        if (this.listeners[0] === undefined) {
+            this.listeners[id] = [];
+        }
+        this.listeners[id].push(listener);
+    }
+
+    notifyListeners() {
+        for (const [_id, listeners] of Object.entries(this.listeners)) {
+            listeners.forEach((listener) => {
+                listener(this.value);
+            });
+        }
     }
 }
-
 
 class StaticManager {
     constructor(prefix = '') {
@@ -39,8 +57,7 @@ class StaticManager {
     }
 
     setData(key, value, persistent = false) {
-        const staticInstance = this._getStatic(key, value, persistent);
-        staticInstance.value = value;
+        this.getAccess(key, value, persistent)(value);
         if (persistent) {
             this.savePersistentData();
         }
@@ -67,5 +84,40 @@ class StaticManager {
                 _persistentMap.set(key, new Static(data[key], () => this.savePersistentData()));
             }
         }
+    }
+
+    addListener(key, init, listener, persistent = false, scriptId = 0) {
+        const staticInstance = this._getStatic(key, init, persistent);
+        staticInstance.addListener(listener, scriptId);
+    }
+}
+
+class StaticManagerForScripts {
+    #StaticManager;
+
+    constructor(modid, scriptid) {
+        this.modid = modid;
+        this.scriptid = scriptid;
+        this.#StaticManager = new StaticManager(modid);
+    }
+
+    getData(key, init, persistent) {
+        return this.#StaticManager.getData(key, init, persistent);
+    }
+
+    setData(key, value, persistent) {
+        return this.#StaticManager.setData(key, value, persistent);
+    }
+
+    getAccess(key, init, persistent) {
+        return this.#StaticManager.getAccess(key, init, persistent);
+    }
+
+    loadPersistentData() {
+        return this.#StaticManager.loadPersistentData();
+    }
+
+    addListener(key, init, listener, persistent = false) {
+        return this.#StaticManager.addListener(key, init, listener, persistent, this.scriptid);
     }
 }

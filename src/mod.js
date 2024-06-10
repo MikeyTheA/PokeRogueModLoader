@@ -54,7 +54,6 @@ class Mod {
         this.description = data.description || '';
         this.author = data.author || 'Unknown author';
         this.links = data.links || [];
-        this.data = new StaticManager(this.id)
         this.addWindow = addWindow
         this.Windows = Windows
         
@@ -74,6 +73,7 @@ class Script {
         this.mod = mod
         this.toggled = this.mod.dataConfig.getData('ModListModOptions ' + this.mod.id + ' ScriptsToggle ' + this.id, true, true)
         this.hooks = {}
+        this.data = new StaticManagerForScripts(this.mod.id, this.id)
 
         this.sandbox = new Sandbox({
             ImGui: ImGui,
@@ -117,7 +117,7 @@ class Script {
             addWindow: (name, show, flags) => {
                 this.mod.addWindow(name,show,flags,this.id)
             },
-            data: this.mod.data,
+            data: this.data,
             hook: (phase, func) => {
                 if(this.hooks[phase] === undefined){
                     this.hooks[phase] = []
@@ -137,6 +137,17 @@ class Script {
                 delete this.mod.Windows[key]
             }
         }
+
+        const removeListeners = (map) => {
+            for (const [fullKey, staticInstance] of map.entries()) {
+                if (staticInstance.listeners[this.id]) {
+                    delete staticInstance.listeners[this.id];
+                }
+            }
+        };
+    
+        removeListeners(_staticMap);
+        removeListeners(_persistentMap);
     }
 
     reload(){
