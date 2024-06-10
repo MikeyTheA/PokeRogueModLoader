@@ -95,15 +95,15 @@ function showModList(env) {
                 ImGui.BeginGroup();
                 ImGui.BeginChild('Mod logs##ModListModOptions', new ImGui.Vec2(0, -ImGui.GetFrameHeightWithSpacing()));
                 const logs = data.getData(`LogsForMod${mod.id}`, [], false);
-                logs.forEach((log) => {
+                logs.forEach((log, logindex) => {
                     if (log[0] == 'log' && typeof log[1] === 'object') {
-                        if (ImGui.TreeNode(`${log[1].constructor.name}##Logs`)) {
-                            treeObject(log[1]);
+                        if (ImGui.TreeNode(`${log[1].constructor.name}##Logs${logindex}`)) {
+                            treeObject(log[1], logindex);
 
-                            if (ImGui.TreeNode(`Prototypes##${log[1].constructor.name}`)) {
+                            if (ImGui.TreeNode(`Prototypes##${log[1].constructor.name}${logindex}`)) {
                                 let proto = Object.getPrototypeOf(log[1]);
                                 while (proto) {
-                                    treeObject(proto);
+                                    treeObject(proto, logindex);
                                     proto = Object.getPrototypeOf(proto);
                                 }
                                 ImGui.TreePop();
@@ -351,13 +351,13 @@ function codeHighlighting(code, x, y) {
     });
 }
 
-function treeObject(obj, path = '') {
+function treeObject(obj, index, path = '') {
     for (const key of Object.getOwnPropertyNames(obj)) {
         const value = obj[key];
         const fullPath = path + key;
         if (typeof value === 'object' && value !== null) {
-            if (ImGui.TreeNode(`${key}##TreeObject${fullPath}`)) {
-                treeObject(value, fullPath + '.');
+            if (ImGui.TreeNode(`${key}##TreeObject${fullPath}${index}`)) {
+                treeObject(value, index, fullPath + '.');
                 ImGui.TreePop();
             }
         } else {
