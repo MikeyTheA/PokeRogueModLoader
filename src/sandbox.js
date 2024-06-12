@@ -7,17 +7,21 @@ class Sandbox {
 
         this.sandboxWindow = this.iframe.contentWindow;
 
-        this.clearEnv()
-        this.refreshEnv(env)
+        this.clearEnv();
+        this.refreshEnv(env);
     }
 
-    clearEnv(){
+    clearEnv() {
         const whitelisted = [0, 'location', 'eval', 'Object', 'String', 'Number', 'Bigint', 'Boolean', 'Undefined', 'Null', 'Symbol'];
         Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
-                if (!whitelisted.includes(key)) {
-                    try{this.sandboxWindow[key] = undefined}catch{}
-                    try{delete this.sandboxWindow[key]}catch{}
-                }
+            if (!whitelisted.includes(key)) {
+                try {
+                    this.sandboxWindow[key] = undefined;
+                } catch {}
+                try {
+                    delete this.sandboxWindow[key];
+                } catch {}
+            }
         });
     }
 
@@ -28,19 +32,19 @@ class Sandbox {
     }
 
     eval(code) {
-        try{
+        try {
             const script = this.sandboxWindow.document.createElement('script');
             script.innerHTML = `
             try{
-                eval(\`${code}\`)
+               ${code}
             }catch(e){
                 error(e.message)
             }
             `;
             this.sandboxWindow.document.body.appendChild(script);
-        }catch(e){
+        } catch (e) {
             const errorScript = this.sandboxWindow.document.createElement('script');
-            script.innerHTML = `error(e.message)`
+            script.innerHTML = `error(e.message)`;
             this.sandboxWindow.document.body.appendChild(errorScript);
         }
     }

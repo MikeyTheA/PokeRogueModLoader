@@ -19,7 +19,7 @@ function showModList(env) {
                     mods.mods[modorder] = mods.mods[n_next];
                     mods.mods[n_next] = mod;
                     ImGui.ResetMouseDragDelta();
-                    mods.save()
+                    mods.save();
                 }
             }
         });
@@ -165,6 +165,7 @@ function showEditMod(env) {
             mods.save();
             return mod.description;
         });
+
         ImGui.PushStyleColor(ImGui.ImGuiCol.Button, ImGui.IM_COL32(255, 0, 0, 255));
         ImGui.PushStyleColor(ImGui.ImGuiCol.ButtonHovered, ImGui.IM_COL32(220, 20, 20, 255));
         if (ImGui.Button('Delete mod')) {

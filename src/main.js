@@ -2,7 +2,7 @@ async function main() {
     // Utility Setup
     const data = new StaticManager();
     const Windows = {};
-    const mods = new ModsHandler({data, addWindow, Windows});
+    const mods = new ModsHandler({ data, addWindow, Windows });
 
     data.loadPersistentData();
 
@@ -111,9 +111,9 @@ async function main() {
                 ImGui.SetNextWindowSize(new ImGui.Vec2(value.flags.initialWidth, value.flags.initialHeight), ImGui.Cond.FirstUseEver);
                 if (value.open() && ImGui.Begin(key, (!value.flags.noClose && value.open) || undefined)) {
                     try {
-                        if(value.flags.scriptId === 0){
+                        if (value.flags.scriptId === 0) {
                             value.show({ data, mods, Windows });
-                        }else{
+                        } else {
                             value.show();
                         }
                     } catch (e) {
@@ -125,18 +125,18 @@ async function main() {
                 }
             }
 
-            mods.mods.forEach(mod => {
-                mod.scripts.forEach(script => {
-                    const toggled = data.getData('ModListModOptions ' + mod.id + ' ScriptsToggle ' + script.id, true, true)
-                    if(script.toggled !== toggled){
-                        script.toggled = toggled
-                        script.sandbox.sandboxWindow.toggled = toggled
-                        if(script.sandbox.sandboxWindow.onToggle){
-                            script.sandbox.sandboxWindow.onToggle(toggled)
+            mods.mods.forEach((mod) => {
+                mod.scripts.forEach((script) => {
+                    const toggled = data.getData('ModListModOptions ' + mod.id + ' ScriptsToggle ' + script.id, true, true);
+                    if (script.toggled !== toggled) {
+                        script.toggled = toggled;
+                        script.sandbox.sandboxWindow.toggled = toggled;
+                        if (script.sandbox.sandboxWindow.onToggle) {
+                            script.sandbox.sandboxWindow.onToggle(toggled);
                         }
                     }
-                })
-            })
+                });
+            });
 
             // ImGui ending
 
@@ -186,7 +186,7 @@ async function main() {
                 noClose: flags.noClose || false,
                 initialWidth: flags.initialWidth || 500,
                 initialHeight: flags.initialHeight || 440,
-                scriptId: scriptId || 0
+                scriptId: scriptId || 0,
             },
         };
     }
@@ -199,33 +199,33 @@ async function main() {
     }
 
     function interceptPhase(phase) {
-        const name = phase.constructor.name
+        const name = phase.constructor.name;
 
-        mods.mods.forEach(mod => {
-            mod.scripts.forEach(script => {
-                if(typeof script.sandbox.sandboxWindow.onPhasePush === "function"){
-                    script.sandbox.sandboxWindow.onPhasePush(phase)
+        mods.mods.forEach((mod) => {
+            mod.scripts.forEach((script) => {
+                if (typeof script.sandbox.sandboxWindow.onPhasePush === 'function') {
+                    script.sandbox.sandboxWindow.onPhasePush(phase);
                 }
-            })
-        })
+            });
+        });
 
-        mods.mods.forEach(mod => {
-            mod.scripts.forEach(script => {
+        mods.mods.forEach((mod) => {
+            mod.scripts.forEach((script) => {
                 for (const [phaseTarget, funcs] of Object.entries(script.hooks)) {
-                    funcs.forEach(func => {
-                        if(phaseTarget === name){
-                            try{
-                                func(phase)
-                            }catch(e){
-                                const logs = data.getData(`LogsForMod${mod.id}`, [], false)
-                                logs.push(['error', e.message])
-                                data.setData(`LogsForMod${mod.id}`, logs)
+                    funcs.forEach((func) => {
+                        if (phaseTarget === name) {
+                            try {
+                                func(phase);
+                            } catch (e) {
+                                const logs = data.getData(`LogsForMod${mod.id}`, [], false);
+                                logs.push(['error', e.message]);
+                                data.setData(`LogsForMod${mod.id}`, logs);
                             }
                         }
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
     }
 }
 
