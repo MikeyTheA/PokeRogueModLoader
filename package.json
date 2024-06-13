@@ -1,0 +1,22 @@
+{
+  "name": "pokeroguemodloader",
+  "version": "1.0.0",
+  "description": "todo",
+  "main": "external/main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikeyTheA/PokeRogueModLoader.git"
+  },
+  "author": "MikeyTheA",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/MikeyTheA/PokeRogueModLoader/issues"
+  },
+  "homepage": "https://github.com/MikeyTheA/PokeRogueModLoader#readme"
+}
