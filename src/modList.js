@@ -369,7 +369,7 @@ const codeEditorTheme = {
 
 function codeHighlighting(code, x, y) {
     const highlightedHTML = Prism.highlight(code, Prism.languages.javascript, 'javascript');
-    const lineHeight = ImGui.GetTextLineHeight(); // Ensure consistent line height
+    const lineHeight = ImGui.GetTextLineHeight();
 
     highlightedHTML.split('\n').forEach((line, index) => {
         const leadingWhitespace = line.match(/^\s*/)[0];
