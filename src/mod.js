@@ -137,6 +137,7 @@ class Script {
                 this.mod.addWindow(name, show, flags, this.id);
             },
             data: this.data,
+            globalData: new StaticManagerForScripts('global', this.id),
             hook: (phase, func) => {
                 if (this.hooks[phase] === undefined) {
                     this.hooks[phase] = [];
@@ -150,6 +151,15 @@ class Script {
     }
 
     clean() {
+        if (this.sandbox.sandboxWindow.cleanup) {
+            this.sandbox.sandboxWindow.cleanup();
+        }
+
+        this.sandbox.sandboxWindow.cleanup = undefined;
+        this.sandbox.sandboxWindow.update = undefined;
+        this.sandbox.sandboxWindow.onToggle = undefined;
+        this.sandbox.sandboxWindow.onPhasePush = undefined;
+
         this.hooks = {};
 
         for (const [key, value] of Object.entries(this.mod.Windows)) {

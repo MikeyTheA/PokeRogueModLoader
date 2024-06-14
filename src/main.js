@@ -139,6 +139,10 @@ async function main() {
                             script.sandbox.sandboxWindow.onToggle(toggled);
                         }
                     }
+
+                    if (script.sandbox.sandboxWindow.update) {
+                        script.sandbox.sandboxWindow.update();
+                    }
                 });
             });
 
