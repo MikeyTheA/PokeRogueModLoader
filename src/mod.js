@@ -24,11 +24,18 @@ class ModsHandler {
     }
 
     save() {
+        const mods = this.compress();
+        localStorage.setItem('PRModLoaderMODS', LZString.compressToUTF16(JSON.stringify(mods)));
+        return true;
+    }
+
+    compress() {
         const mods = this.mods.map((mod) => ({
             id: mod.id,
             name: mod.name,
             description: mod.description,
             author: mod.author,
+            external: mod.external,
             scripts: mod.scripts.map((script) => ({
                 id: script.id,
                 name: script.name,
@@ -36,8 +43,7 @@ class ModsHandler {
                 toggleable: script.toggleable,
             })),
         }));
-        localStorage.setItem('PRModLoaderMODS', LZString.compressToUTF16(JSON.stringify(mods)));
-        return true;
+        return mods;
     }
 
     load() {
@@ -58,11 +64,9 @@ class Mod {
         this.author = data.author || 'Unknown author';
         this.addWindow = addWindow;
         this.Windows = Windows;
+        this.external = data.external || false;
 
         this.scripts = (data.scripts || []).map((scriptData) => new Script(scriptData, this));
-        this.scripts.forEach((script) => {
-            script.reload();
-        });
     }
 }
 
@@ -141,6 +145,8 @@ class Script {
             },
             toggled: this.toggled,
         });
+
+        this.reload();
     }
 
     clean() {

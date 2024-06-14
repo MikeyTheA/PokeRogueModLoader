@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node external/main.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/MikeyTheA/PokeRogueModLoader/issues"
   },
-  "homepage": "https://github.com/MikeyTheA/PokeRogueModLoader#readme"
+  "homepage": "https://github.com/MikeyTheA/PokeRogueModLoader#readme",
+  "dependencies": {
+    "ws": "^8.17.0"
+  },
+  "type": "module"
 }

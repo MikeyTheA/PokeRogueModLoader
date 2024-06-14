@@ -1,7 +1,25 @@
 function showMainMenu(env) {
-    const { Windows } = env;
+    const { Windows, data, mods } = env;
 
     if (ImGui.CollapsingHeader('Settings')) {
+        if (data.getData('WebSocketSuccess', false, false)) {
+            ImGui.PushStyleColor(ImGui.ImGuiCol.Text, ImGui.IM_COL32(0, 255, 0, 255));
+        } else {
+            ImGui.PushStyleColor(ImGui.ImGuiCol.Text, ImGui.IM_COL32(255, 0, 0, 255));
+        }
+        ImGui.Checkbox(`External editing`, (value = data.getData('ExternalEditing', false, true)) => {
+            const changed = value !== data.getData('ExternalEditing', false, true);
+            data.setData('ExternalEditing', value, true);
+
+            if (value && changed) {
+                startWS(data, mods);
+            } else if (!value && changed) {
+                stopWS();
+            }
+
+            return value;
+        });
+        ImGui.PopStyleColor();
     }
 
     if (ImGui.CollapsingHeader('Windows')) {

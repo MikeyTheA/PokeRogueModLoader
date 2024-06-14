@@ -63,7 +63,7 @@ function showModList(env) {
             if (ImGui.BeginTabItem('Scripts##ModListModOptions')) {
                 ImGui.BeginGroup();
 
-                if (ImGui.SmallButton('New##ModListModOptionsScripts')) {
+                if (!mod.external && ImGui.SmallButton('New##ModListModOptionsScripts')) {
                     mod.scripts.push(new Script({}, mod));
                     mods.save();
                 }
@@ -77,11 +77,13 @@ function showModList(env) {
                             return true;
                         });
                     }
-                    ImGui.SameLine();
-                    if (ImGui.Button(`Edit##ModListModOptionsScripts${script.id}`)) {
-                        data.setData('Edit script Window', true, false);
-                        data.setData('Currently editing the script', script.id, false);
-                        data.setData('Currently editing the script of mod', selectedModId, false);
+                    if (!mod.external) {
+                        ImGui.SameLine();
+                        if (ImGui.Button(`Edit##ModListModOptionsScripts${script.id}`)) {
+                            data.setData('Edit script Window', true, false);
+                            data.setData('Currently editing the script', script.id, false);
+                            data.setData('Currently editing the script of mod', selectedModId, false);
+                        }
                     }
                 });
 
@@ -130,10 +132,22 @@ function showModList(env) {
             }
 
             ImGui.EndTabBar();
-            ImGui.SameLine(ImGui.GetWindowContentRegionMax().x - 35);
-            if (ImGui.Button('Edit##ModList')) {
-                data.setData('Edit mod Window', true, false);
-                data.setData('Currently editing the mod', selectedModId);
+            if (!mod.external) {
+                ImGui.SameLine(ImGui.GetWindowContentRegionMax().x - 35);
+                if (ImGui.Button('Edit##ModList')) {
+                    data.setData('Edit mod Window', true, false);
+                    data.setData('Currently editing the mod', selectedModId);
+                }
+            } else {
+                ImGui.SameLine(ImGui.GetWindowContentRegionMax().x - 50);
+                ImGui.PushStyleColor(ImGui.ImGuiCol.Button, ImGui.IM_COL32(255, 0, 0, 255));
+                ImGui.PushStyleColor(ImGui.ImGuiCol.ButtonHovered, ImGui.IM_COL32(220, 20, 20, 255));
+                if (ImGui.Button('Remove##ModList')) {
+                    mods.deleteMod(mod.id);
+                    mods.save();
+                }
+                ImGui.PopStyleColor();
+                ImGui.PopStyleColor();
             }
         }
 
@@ -165,6 +179,50 @@ function showEditMod(env) {
             mods.save();
             return mod.description;
         });
+
+        if (ImGui.Button('Make external')) {
+            ImGui.OpenPopup('Make mod externally edited?');
+        }
+
+        const scriptNames = mod.scripts.map((script) => script.name);
+        const uniqueNames = new Set(scriptNames);
+
+        if (mods.mods.filter((m) => m.name === mod.name && m.external).length >= 1) {
+            if (ImGui.BeginPopupModal('Make mod externally edited?', null, ImGui.WindowFlags.AlwaysAutoResize)) {
+                ImGui.Text('There is already an external mod with this name, rename please!');
+                if (ImGui.Button('Close')) {
+                    ImGui.CloseCurrentPopup();
+                }
+                ImGui.EndPopup();
+            }
+        } else if (scriptNames.length !== uniqueNames.size) {
+            if (ImGui.BeginPopupModal('Make mod externally edited?', null, ImGui.WindowFlags.AlwaysAutoResize)) {
+                ImGui.Text('There are scripts in your mod that have the same name, rename them before making the mod external!');
+                if (ImGui.Button('Close')) {
+                    ImGui.CloseCurrentPopup();
+                }
+                ImGui.EndPopup();
+            }
+        } else {
+            if (ImGui.BeginPopupModal('Make mod externally edited?', null, ImGui.WindowFlags.AlwaysAutoResize)) {
+                ImGui.Text('Are you sure you want to make this mod external?');
+                ImGui.Text('You will not be able to edit this mod or its scripts in any way from the UI anymore');
+                ImGui.Text('Before doing this, make sure you have checked the documentation or looked at a tutorial');
+                if (ImGui.Button('Yes')) {
+                    mod.external = true;
+                    mods.save();
+                    data.setData('Edit mod Window', false, false);
+                    data.setData('Edit script Window', false, false);
+                    newModWS(mods);
+                    ImGui.CloseCurrentPopup();
+                }
+                ImGui.SameLine();
+                if (ImGui.Button('No')) {
+                    ImGui.CloseCurrentPopup();
+                }
+                ImGui.EndPopup();
+            }
+        }
 
         ImGui.PushStyleColor(ImGui.ImGuiCol.Button, ImGui.IM_COL32(255, 0, 0, 255));
         ImGui.PushStyleColor(ImGui.ImGuiCol.ButtonHovered, ImGui.IM_COL32(220, 20, 20, 255));

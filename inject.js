@@ -2,10 +2,9 @@ const observer = new MutationObserver(async (mutations, observer) => {
     if (document.body) {
         observer.disconnect();
 
-        let html = await (await fetch('https://pokerogue.net/index.html')).text()
+        let html = await (await fetch('https://pokerogue.net/index.html')).text();
 
         html = html.replace('</title>', '+</title>');
-        //html = html.replace(`<script type="module" crossorigin src="`, `<script src="${chrome.runtime.getURL('lib/imgui.umd.js')}"></script><script src="${chrome.runtime.getURL('lib/imgui_impl.umd.js')}"></script> <script src="${chrome.runtime.getURL('src/main.js')}"></script> </script> <script type="module" crossorigin src="`);
         html = html.replace('<body>', '<body><canvas id="output" tabindex="1" style="position:absolute;top:0px;right:0px;width:100%;height:100%;z-index:1;background:transparent;pointer-events:auto;"></canvas>');
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
@@ -33,6 +32,7 @@ const observer = new MutationObserver(async (mutations, observer) => {
         await loadScript(chrome.runtime.getURL('src/data.js'));
         await loadScript(chrome.runtime.getURL('src/sandbox.js'));
         await loadScript(chrome.runtime.getURL('src/mod.js'));
+        await loadScript(chrome.runtime.getURL('src/external.js'));
         await loadScript(chrome.runtime.getURL('src/mainMenu.js'));
         await loadScript(chrome.runtime.getURL('src/modList.js'));
         await loadScript(chrome.runtime.getURL('src/main.js'));

@@ -40,6 +40,10 @@ async function main() {
     // ImGui Setup
     await ImGui.default();
 
+    if (data.getData('ExternalEditing', false, true)) {
+        startWS(data, mods);
+    }
+
     const canvas = document.getElementById('output');
 
     const resize = () => {
