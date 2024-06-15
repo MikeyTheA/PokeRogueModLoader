@@ -7,7 +7,7 @@ class ModsHandler {
     }
 
     newMod(data) {
-        const mod = new Mod(data, this.data, this.addWindow, this.Windows);
+        const mod = new Mod(data, this.data, this.addWindow, this.Windows, this);
         this.mods.push(mod);
     }
 
@@ -36,6 +36,7 @@ class ModsHandler {
             description: mod.description,
             author: mod.author,
             external: mod.external,
+            version: mod.version,
             scripts: mod.scripts.map((script) => ({
                 id: script.id,
                 name: script.name,
@@ -50,13 +51,13 @@ class ModsHandler {
         const mods = LZString.decompressFromUTF16(localStorage.getItem('PRModLoaderMODS'));
         if (mods) {
             const parsedMods = JSON.parse(mods);
-            this.mods = parsedMods.map((modData) => new Mod(modData, this.data, this.addWindow, this.Windows));
+            this.mods = parsedMods.map((modData) => new Mod(modData, this.data, this.addWindow, this.Windows, this));
         }
     }
 }
 
 class Mod {
-    constructor(data = {}, dataConfig, addWindow, Windows) {
+    constructor(data = {}, dataConfig, addWindow, Windows, mods) {
         this.dataConfig = dataConfig;
         this.id = data.id || uuid.v4();
         this.name = data.name || 'Unnamed mod';
@@ -64,8 +65,11 @@ class Mod {
         this.author = data.author || 'Unknown author';
         this.addWindow = addWindow;
         this.Windows = Windows;
-        this.external = data.external || false;
+        this.version = data.version || '1.0';
+        this.mods = mods;
 
+        this.external = data.external || false;
+        this.github = this.id.startsWith('https://github.com/');
         this.scripts = (data.scripts || []).map((scriptData) => new Script(scriptData, this));
     }
 }
@@ -145,6 +149,13 @@ class Script {
                 this.hooks[phase].push(func);
             },
             toggled: this.toggled,
+            getInstalledMods: () => {
+                return this.mod.mods.mods.map((mod) => ({
+                    name: mod.name,
+                    version: mod.version,
+                    author: mod.author,
+                }));
+            },
         });
 
         this.reload();

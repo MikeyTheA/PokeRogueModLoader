@@ -35,6 +35,7 @@ const observer = new MutationObserver(async (mutations, observer) => {
         await loadScript(chrome.runtime.getURL('src/external.js'));
         await loadScript(chrome.runtime.getURL('src/mainMenu.js'));
         await loadScript(chrome.runtime.getURL('src/modList.js'));
+        await loadScript(chrome.runtime.getURL('src/modBrowser.js'));
         await loadScript(chrome.runtime.getURL('src/main.js'));
     }
 });

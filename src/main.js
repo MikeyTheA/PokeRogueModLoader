@@ -18,6 +18,12 @@ async function main() {
         persistentOpen: true,
     });
 
+    addWindow('Mod browser', showModBrowser, {
+        hidden: false,
+        noClose: false,
+        persistentOpen: true,
+    });
+
     addWindow('Edit mod', showEditMod, {
         open: false,
         hidden: true,

@@ -52,18 +52,14 @@ function showModList(env) {
                     ImGui.TextWrapped(`Description: ${mod.description}`);
                 }
                 ImGui.Text(`Author: ${mod.author}`);
-                if (mod.links?.length > 0) {
-                    mod.links.forEach((link) => {
-                        ImGui.Text(`${link.title}: ${link.link}`);
-                    });
-                }
+                ImGui.Text(`Version: ${mod.version}`);
                 ImGui.EndTabItem();
             }
 
             if (ImGui.BeginTabItem('Scripts##ModListModOptions')) {
                 ImGui.BeginGroup();
 
-                if (!mod.external && ImGui.SmallButton('New##ModListModOptionsScripts')) {
+                if (!mod.external && !mod.github && ImGui.SmallButton('New##ModListModOptionsScripts')) {
                     mod.scripts.push(new Script({}, mod));
                     mods.save();
                 }
@@ -77,7 +73,7 @@ function showModList(env) {
                             return true;
                         });
                     }
-                    if (!mod.external) {
+                    if (!mod.external && !mod.github) {
                         ImGui.SameLine();
                         if (ImGui.Button(`Edit##ModListModOptionsScripts${script.id}`)) {
                             data.setData('Edit script Window', true, false);
@@ -132,7 +128,7 @@ function showModList(env) {
             }
 
             ImGui.EndTabBar();
-            if (!mod.external) {
+            if (!mod.external && !mod.github) {
                 ImGui.SameLine(ImGui.GetWindowContentRegionMax().x - 35);
                 if (ImGui.Button('Edit##ModList')) {
                     data.setData('Edit mod Window', true, false);
@@ -178,6 +174,12 @@ function showEditMod(env) {
             mod.description = value;
             mods.save();
             return mod.description;
+        });
+
+        ImGui.InputText('Version##EditMod', (value = mod.version) => {
+            mod.version = value;
+            mods.save();
+            return mod.version;
         });
 
         if (ImGui.Button('Make external')) {

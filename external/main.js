@@ -146,6 +146,7 @@ class fileHandler {
                             JSON.stringify(
                                 {
                                     description: mod.description,
+                                    version: mod.version,
                                     author: mod.author,
                                 },
                                 null,

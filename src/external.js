@@ -36,6 +36,7 @@ const handleWSMessage = (event, data, mods) => {
         if (mod) {
             mod.description = eventData.data.description || '';
             mod.author = eventData.data.author || 'Unknown author';
+            mod.version = eventData.data.version || '1.0';
 
             eventData.data.scripts.forEach((script) => {
                 const changescript = mod.scripts.find((scriptcheck) => scriptcheck.name === script.name);
@@ -65,10 +66,12 @@ const handleWSMessage = (event, data, mods) => {
         } else {
             mods.newMod({
                 name: eventData.data.name,
-                description: eventData.data.description,
-                author: eventData.data.author,
+                description: eventData.data.description || '',
+                author: eventData.data.author || 'Unknown author',
+                version: eventData.data.version || '1.0',
                 external: true,
             });
+            handleWSMessage(event, data, mods);
         }
         mods.save();
     }
