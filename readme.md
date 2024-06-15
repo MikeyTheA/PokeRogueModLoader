@@ -4,15 +4,15 @@
 
 Mod loader for PokeRogue.net in the form of a browser extension.
 
-#Usage
+# Usage
 
 For installing the mod loader
 
-##Prerequisites
+## Prerequisites
 
 * A browser capable of handling extensions (preferrably firefox, as it is what it has been tested on)
 
-##Installation
+## Installation
 
 Either
 1. Download the repository as a ZIP file
@@ -24,7 +24,7 @@ Either
 
 Then, load the extension depending on your browser
 
-###Firefox
+### Firefox
 
 1. Go to [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox)
 2. Click on "Load Temporary Add-on..."
@@ -33,26 +33,26 @@ Then, load the extension depending on your browser
 5. Remember that you will have to re-do this every time you restart the browser
 6. (If you have issues) go to pokerogue.net, then go to your addons popup menu from the puzzle piece next to your URL bar, find the loaded extension, right click it, and press "Always allow on Pokerogue.net"
 
-###Edge
+### Edge
 
 1. Go to [edge://extensions/](edge://extensions/)
 2. Press "Load unpacked"
 3. Select the folder where you extracted the mod loader with the manifest.json
 4. Load up PokeRogue.net and the mod manager should pop up
 
-###Other browsers
+### Other browsers
 
 Other browsers to be added, you can still attempt to load them, however nothing else has been officially tested.
 
 
-###Updating
+### Updating
 
 If you downloaded it as a zip, just do it the same way by download it, deleting the old files and extracting into the same folder.
 If you used git clone, cd into the directory where you cloned it, and `git pull`
 
 
-###Frequently asked questions
+### Frequently asked questions
 
-####The UI is blurry, what do I do?
+#### The UI is blurry, what do I do?
 
 Resize your browser for a second and it should adjust the resolution
