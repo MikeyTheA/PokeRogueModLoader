@@ -53,6 +53,5 @@ If you used git clone, cd into the directory where you cloned it, and `git pull`
 
 ### Frequently asked questions
 
-#### The UI is blurry, what do I do?
-
-Resize your browser for a second and it should adjust the resolution
+Q: The UI is blurry, what do I do?
+A: Resize your browser for a second and it should adjust the resolution
