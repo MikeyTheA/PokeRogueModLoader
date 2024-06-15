@@ -1,6 +1,11 @@
 function showMainMenu(env) {
     const { Windows, data, mods } = env;
 
+    ImGui.Text('Originally made by MikeyTheA\nThe project is open source on github\nhttps://github.com/MikeyTheA/PokeRogueModLoader');
+    if (ImGui.Button('Join discord')) {
+        window.open('https://discord.gg/JCE5fwfsca');
+    }
+
     if (ImGui.CollapsingHeader('Settings')) {
         if (data.getData('WebSocketSuccess', false, false)) {
             ImGui.PushStyleColor(ImGui.ImGuiCol.Text, ImGui.IM_COL32(0, 255, 0, 255));
