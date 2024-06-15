@@ -16,10 +16,14 @@ For installing the mod loader
 
 Either
 1. Download the repository as a ZIP file
+
 	1.1 ![Download zip](pictures/downloadzip.png)
+
 	1.2 Extract the zip somewhere memorable
 2. Clone the repository
+
 	You need git installed for this
+
 	`git clone https://github.com/MikeyTheA/PokeRogueModLoader.git`
 
 Then, load the extension depending on your browser
@@ -48,10 +52,12 @@ Other browsers to be added, you can still attempt to load them, however nothing 
 ### Updating
 
 If you downloaded it as a zip, just do it the same way by download it, deleting the old files and extracting into the same folder.
+
 If you used git clone, cd into the directory where you cloned it, and `git pull`
 
 
 ### Frequently asked questions
 
 Q: The UI is blurry, what do I do?
+
 A: Resize your browser for a second and it should adjust the resolution
