@@ -25,8 +25,7 @@ function showModList(env) {
         });
 
         ImGui.EndChild();
-        ImGui.Button('Load##ModListMod');
-        ImGui.SameLine();
+        //ImGui.Button('Load##ModListMod');
         if (ImGui.Button('New##ModListMod')) {
             mods.newMod();
             mods.save();
