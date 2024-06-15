@@ -1,8 +1,14 @@
 function showMainMenu(env) {
     const { Windows, data, mods } = env;
 
-    ImGui.Text('Originally made by MikeyTheA\nThe project is open source on github\nhttps://github.com/MikeyTheA/PokeRogueModLoader');
-    if (ImGui.Button('Join discord')) {
+    ImGui.Text('Originally made by MikeyTheA');
+    ImGui.Text('The project is open source on github');
+    if (ImGui.SmallButton('https://github.com/MikeyTheA/PokeRogueModLoader')) {
+        window.open('https://github.com/MikeyTheA/PokeRogueModLoader');
+    }
+    ImGui.Text('Join our discord: ');
+    ImGui.SameLine();
+    if (ImGui.SmallButton('https://discord.gg/JCE5fwfsca')) {
         window.open('https://discord.gg/JCE5fwfsca');
     }
 
