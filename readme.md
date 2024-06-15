@@ -6,6 +6,8 @@ Mod loader for PokeRogue.net in the form of a browser extension.
 
 #Usage
 
+For installing the mod loader
+
 ##Prerequisites
 
 * A browser capable of handling extensions (preferrably firefox, as it is what it has been tested on)
