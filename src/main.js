@@ -191,7 +191,7 @@ async function main() {
 
     function addWindow(name, show, flags = {}, scriptId) {
         Windows[name] = {
-            open: data.getAccess(name + ' Window', flags.open === true || false, flags.persistentOpen === true || true),
+            open: data.getAccess(name + ' Window', flags.open === true || false, flags.persistentOpen === true || false),
             show: show,
             flags: {
                 open: flags.open || false,
