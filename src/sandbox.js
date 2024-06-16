@@ -12,7 +12,7 @@ class Sandbox {
     }
 
     clearEnv() {
-        const whitelisted = [0, 'location', 'eval', 'Object', 'String', 'Number', 'Bigint', 'Boolean', 'Undefined', 'Null', 'Symbol'];
+        const whitelisted = [0, 'location', 'eval', 'Object', 'String', 'Number', 'Bigint', 'Boolean', 'Undefined', 'Null', 'Symbol', 'Math', 'NaN', 'Iterator', 'isFinite', 'isNaN', 'JSON', 'Map', 'Infinity', 'Date', 'BigInt', 'Array', 'Function', 'parseFloat', 'parseInt', 'Promise', 'Set', 'undefined'];
         Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
             if (!whitelisted.includes(key)) {
                 try {
