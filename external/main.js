@@ -101,6 +101,13 @@ class fileHandler {
                             data: filename,
                         })
                     );
+                } else if (event === 'rename') {
+                    watchers.push(
+                        fs.watch(`mods/${filename}`, async (event, filename) => {
+                            reconstructModAndSend(filename);
+                        })
+                    );
+                    reconstructModAndSend(filename);
                 }
 
                 if (event === 'change') {
