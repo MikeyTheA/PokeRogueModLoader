@@ -57,6 +57,9 @@ If you downloaded it as a zip, just do it the same way by download it, deleting 
 
 If you used git clone, cd into the directory where you cloned it, and `git pull`
 
+### For mod developers
+
+You can find the wiki [here](https://github.com/MikeyTheA/PokeRogueModLoader/wiki)
 
 ### Frequently asked questions
 
