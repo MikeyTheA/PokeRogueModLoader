@@ -6,6 +6,8 @@ Mod loader for PokeRogue.net in the form of a browser extension.
 
 Join our [Discord](https://discord.com/invite/M8suCFtF7c) for updates and help
 
+We also have a [Youtube tutorial](https://www.youtube.com/watch?v=L7SLeEB_W7I)
+
 # Usage
 
 For installing the mod loader
