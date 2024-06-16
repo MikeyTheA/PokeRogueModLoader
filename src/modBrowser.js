@@ -9,10 +9,14 @@ const showModBrowser = (env) => {
         {
             ImGui.BeginGroup();
 
+            ImGui.PushItemWidth(200);
+            ImGui.InputText('##ModBrowserSearchBar', data.getAccess('ModBrowserSearched', '', false));
+            ImGui.PopItemWidth();
+
             ImGui.BeginChild('ModSelectorPane##ModList', new ImGui.Vec2(200, 0), true);
 
             modsOnGithub.forEach((mod) => {
-                if (ImGui.Selectable(`${mod.name} | ${mod.author}##ModUrlSelectable${mod.author}`, selectedMod === mod)) {
+                if ((mod.name.toLowerCase().includes(data.getData('ModBrowserSearched', '', false).toLowerCase()) || mod.author.toLowerCase().includes(data.getData('ModBrowserSearched', '', false).toLowerCase())) && ImGui.Selectable(`${mod.name} | ${mod.author}##ModUrlSelectable${mod.author}`, selectedMod === mod)) {
                     data.setData(`selectedModInBrowser`, mod, false);
                 }
             });
