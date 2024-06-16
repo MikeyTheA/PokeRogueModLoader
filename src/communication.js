@@ -1,3 +1,5 @@
+const currentVersion = '1.0.2';
+
 const ServerIP = '004206900.xyz';
 
 const inQueue = new Set();
