@@ -1,4 +1,4 @@
-const currentVersion = '1.0';
+const currentVersion = '1.1';
 
 function showMainMenu(env) {
     const { Windows, data, mods } = env;
