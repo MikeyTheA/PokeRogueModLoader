@@ -29,6 +29,7 @@ const observer = new MutationObserver(async (mutations, observer) => {
         await loadScript(chrome.runtime.getURL('lib/uuid.min.js'));
         await loadScript(chrome.runtime.getURL('lib/prism.js'));
 
+        await loadScript(chrome.runtime.getURL('src/communication.js'));
         await loadScript(chrome.runtime.getURL('src/data.js'));
         await loadScript(chrome.runtime.getURL('src/sandbox.js'));
         await loadScript(chrome.runtime.getURL('src/mod.js'));

@@ -52,6 +52,82 @@ function showModList(env) {
                 }
                 ImGui.Text(`Author: ${mod.author}`);
                 ImGui.Text(`Version: ${mod.version}`);
+
+                if (mod.github) {
+                    ImGui.Text('URL: ');
+                    ImGui.SameLine();
+                    if (ImGui.SmallButton(mod.id)) {
+                        window.open(mod.id);
+                    }
+
+                    const fullname = mod.id.replace('https://github.com/', '').split('/');
+                    const author = fullname[0];
+                    const name = fullname[1];
+
+                    const modData = data.getData(`modbrowser|moddata${name}${author}`, undefined, false);
+
+                    if (modData) {
+                        ImGui.Text(`Newest version: ${modData.version}`);
+
+                        if (modData.version !== mod.version && !data.getData(`modbrowser|${modData.url}|downloading`, false, false) && ImGui.Button('Update')) {
+                            data.setData(`modbrowser|${modData.url}|downloading`, true, false);
+                            modData.scripts.forEach((script) => {
+                                requestInformation(script.download_url, data, `scriptdownloads2|${modData.url}|${script.name}`);
+                            });
+                        }
+
+                        if (data.getData(`modbrowser|${modData.url}|downloading`, false, false)) {
+                            const scripts = [];
+                            modData.scripts.forEach((script) => {
+                                const name = script.name.slice(0, -3);
+                                let toggleable = false;
+
+                                if (name.endsWith('.toggle')) {
+                                    name = name.slice(0, -7);
+                                    toggleable = true;
+                                }
+                                const code = data.getData(`scriptdownloads2|${modData.url}|${script.name}`, undefined, false);
+                                if (!code) {
+                                    ImGui.Text(`Downloading ${name}`);
+                                    return;
+                                }
+                                scripts.push({
+                                    name: name,
+                                    toggleable: toggleable,
+                                    code: code,
+                                });
+                            });
+                            if (scripts.length === modData.scripts.length) {
+                                data.setData(`modbrowser|${modData.url}|downloading`, false, false);
+
+                                mod.description = modData.description || '';
+                                mod.version = modData.version || '1.0';
+
+                                scripts.forEach((script) => {
+                                    console.log(script);
+                                    const changescript = mod.scripts.find((scriptcheck) => scriptcheck.name === script.name);
+                                    if (changescript) {
+                                        changescript.toggleable = script.toggleable;
+                                        changescript.code = script.code;
+                                        changescript.reload();
+                                    } else {
+                                        mod.scripts.push(new Script(script, mod));
+                                    }
+                                });
+
+                                mod.scripts.forEach((script) => {
+                                    if (!scripts.find((scriptcheck) => scriptcheck.name === script.name)) {
+                                        script.delete();
+                                    }
+                                });
+                                mods.save();
+                            }
+                        }
+                    } else {
+                        ImGui.Text('Downloading mod information');
+                        requestInformation(`/mod?name=${name}&author=${author}`, data, `modbrowser|moddata${name}${author}`, true);
+                    }
+                }
                 ImGui.EndTabItem();
             }
 
@@ -306,7 +382,6 @@ function showEditScript(env) {
 
     ImGui.SameLine();
     if (ImGui.Button('Reload')) {
-        data.setData(`LogsForMod${mod.id}`, [], false);
         script.reload();
     }
 
