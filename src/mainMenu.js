@@ -8,7 +8,7 @@ function showMainMenu(env) {
     if (data.getData('latestversionofmodloader', undefined, false) !== undefined && data.getData('latestversionofmodloader', undefined, false) !== currentVersion) {
         ImGui.Text('OUT OF DATE!!!!');
         ImGui.Text(`Current version: ${currentVersion}\nLatest version: ${data.getData('latestversionofmodloader', undefined, false)}\nUPDATE FROM THE GITHUB REPOSITORY!!`);
-    } else {
+    } else if (data.getData('latestversionofmodloader', undefined, false) === undefined) {
         requestInformation('https://raw.githubusercontent.com/MikeyTheA/PokeRogueModLoader/main/version', data, 'latestversionofmodloader', false);
     }
 

@@ -8,7 +8,6 @@ const requestInformation = async (endpoint, data, datapoint, json = false) => {
     }
 
     inQueue.add(datapoint);
-    console.log(endpoint);
     const address = endpoint.startsWith('/') ? `https://${ServerIP}${endpoint}` : endpoint;
 
     let responseData = await fetch(address);
