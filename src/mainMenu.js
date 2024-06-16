@@ -6,8 +6,10 @@ function showMainMenu(env) {
     ImGui.Text('Originally made by MikeyTheA');
 
     if (data.getData('latestversionofmodloader', undefined, false) !== undefined && data.getData('latestversionofmodloader', undefined, false) !== currentVersion) {
+        ImGui.PushStyleColor(ImGui.ImGuiCol.Text, ImGui.IM_COL32(255, 0, 0, 255));
         ImGui.Text('OUT OF DATE!!!!');
         ImGui.Text(`Current version: ${currentVersion}\nLatest version: ${data.getData('latestversionofmodloader', undefined, false)}\nUPDATE FROM THE GITHUB REPOSITORY!!`);
+        ImGui.PopStyleColor();
     } else if (data.getData('latestversionofmodloader', undefined, false) === undefined) {
         requestInformation('https://raw.githubusercontent.com/MikeyTheA/PokeRogueModLoader/main/version', data, 'latestversionofmodloader', false);
     }
