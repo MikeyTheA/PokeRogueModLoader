@@ -1,7 +1,17 @@
+const currentVersion = '1.0';
+
 function showMainMenu(env) {
     const { Windows, data, mods } = env;
 
     ImGui.Text('Originally made by MikeyTheA');
+
+    if (data.getData('latestversionofmodloader', undefined, false) !== undefined && data.getData('latestversionofmodloader', undefined, false) !== currentVersion) {
+        ImGui.Text('OUT OF DATE!!!!');
+        ImGui.Text(`Current version: ${currentVersion}\nLatest version: ${data.getData('latestversionofmodloader', undefined, false)}\nUPDATE FROM THE GITHUB REPOSITORY!!`);
+    } else {
+        requestInformation('https://raw.githubusercontent.com/MikeyTheA/PokeRogueModLoader/main/version', data, 'latestversionofmodloader', false);
+    }
+
     ImGui.Text('The project is open source on github');
     if (ImGui.SmallButton('https://github.com/MikeyTheA/PokeRogueModLoader')) {
         window.open('https://github.com/MikeyTheA/PokeRogueModLoader');
