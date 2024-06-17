@@ -61,6 +61,16 @@ async function main() {
 
     window.addEventListener('resize', resize);
     window.addEventListener('visibilitychange', resize);
+    window.addEventListener('orientationchange', resize);
+    document.addEventListener('fullscreenchange', resize);
+    document.addEventListener('webkitfullscreenchange', resize);
+    document.addEventListener('mozfullscreenchange', resize);
+    document.addEventListener('msfullscreenchange', resize);
+    window.addEventListener('load', resize);
+    window.addEventListener('deviceorientation', resize);
+    document.addEventListener('click', resize);
+    document.addEventListener('touchstart', resize);
+    document.addEventListener('touchend', resize);
 
     ImGui.CreateContext();
     ImGui_Impl.Init(canvas);
@@ -74,6 +84,24 @@ async function main() {
     document.addEventListener('mousemove', (event) => {
         mousePos.x = event.clientX;
         mousePos.y = event.clientY;
+    });
+
+    canvas.addEventListener('touchstart', (e) => {
+        // Convert touch event to ImGui mouse event
+        const touch = e.touches[0];
+        IO.MouseDown[0] = true;
+        IO.MousePos.x = touch.clientX;
+        IO.MousePos.y = touch.clientY;
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        IO.MousePos.x = touch.clientX;
+        IO.MousePos.y = touch.clientY;
+    });
+
+    canvas.addEventListener('touchend', () => {
+        IO.MouseDown[0] = false;
     });
 
     window.requestAnimationFrame(_loop);
