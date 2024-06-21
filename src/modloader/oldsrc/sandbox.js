@@ -1,4 +1,4 @@
-class Sandbox {
+/*class Sandbox {
     constructor(env = {}) {
         this.iframe = document.createElement('iframe');
         this.iframe.style.display = 'none';
@@ -53,3 +53,4 @@ class Sandbox {
         document.body.removeChild(this.iframe);
     }
 }
+*/
