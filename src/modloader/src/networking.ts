@@ -1,6 +1,6 @@
 import { LoaderData } from "./main";
 
-const ServerIP = "004206900.xyz";
+const ServerIP = "api.mokerogue.net";
 const inQueue = new Set();
 
 export const requestInformation = async (url: string, datapoint: string, json: boolean = true) => {
