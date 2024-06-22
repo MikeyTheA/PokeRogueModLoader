@@ -337,6 +337,17 @@ export function apiFetch(path: string, authed: boolean = false): Promise<Respons
         request["headers"] = { "Authorization": sId };
       }
     }
+
+    if (request["headers"]) {
+      request["headers"]["Origin"] = "https://pokerogue.net";
+      request["headers"]["Referer"] = "https://pokerogue.net";
+    } else {
+      request["headers"] = {
+        Origin: "https://pokerogue.net",
+        Referer: "https://pokerogue.net",
+      };
+    }
+
     fetch(`${apiUrl}/${path}`, request)
       .then(response => resolve(response))
       .catch(err => reject(err));
