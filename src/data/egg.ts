@@ -162,7 +162,6 @@ export class Egg {
     this._species = eggOptions.species ?? this.rollSpecies(eggOptions.scene);
 
     this._overrideHiddenAbility = eggOptions.overrideHiddenAbility ?? false;
-    this._eggMoveIndex = eggOptions.eggMoveIndex ?? this.rollEggMoveIndex();
 
     // Override egg tier and hatchwaves if species was given
     if (eggOptions.species) {
@@ -175,6 +174,8 @@ export class Egg {
         this._variantTier = VariantTier.COMMON;
       }
     }
+    // Needs this._tier so it needs to be generated afer the tier override if bought from same species
+    this._eggMoveIndex = eggOptions.eggMoveIndex ?? this.rollEggMoveIndex();
     if (eggOptions.pulled) {
       this.addEggToGameData(eggOptions.scene);
     }
@@ -463,9 +464,10 @@ export class Egg {
   }
 
   private checkForPityTierOverrides(scene: BattleScene): void {
+    const tierValueOffset = this._sourceType === EggSourceType.GACHA_LEGENDARY ? 1 : 0;
     scene.gameData.eggPity[EggTier.GREAT] += 1;
     scene.gameData.eggPity[EggTier.ULTRA] += 1;
-    scene.gameData.eggPity[EggTier.MASTER] += 1 + this._sourceType === EggSourceType.GACHA_LEGENDARY ? 1 : 0;
+    scene.gameData.eggPity[EggTier.MASTER] += 1 + tierValueOffset;
     // These numbers are roughly the 80% mark. That is, 80% of the time you'll get an egg before this gets triggered.
     if (scene.gameData.eggPity[EggTier.MASTER] >= 412 && this._tier === EggTier.COMMON) {
       this._tier = EggTier.MASTER;
