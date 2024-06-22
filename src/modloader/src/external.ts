@@ -9,11 +9,9 @@ export class ExternalHandler {
 
   constructor(port: Number) {
     this.port = port;
-
-    this.connect();
   }
 
-  private connect() {
+  connect() {
     this.webSocket = new WebSocket(`ws://localhost:${this.port}`);
 
     this.webSocket.onopen = () => {
@@ -67,9 +65,12 @@ export class ExternalHandler {
         });
       } else if (message.type === "update") {
       } else if (message.type === "newmod") {
-        modsHandler.addMod({
-          name: message.data,
-        });
+        const existingMod = modsHandler.mods.find((modsearch) => modsearch.name === message.data && modsearch.github === false);
+        if (!existingMod) {
+          modsHandler.addMod({
+            name: message.data,
+          });
+        }
       } else if (message.type === "deletemod") {
         const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data);
         if (mod) {

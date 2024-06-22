@@ -4,7 +4,7 @@ import { Sandbox } from "./sandbox";
 import { WindowFlags, windowHandler } from "./windows";
 
 import PokeRogue from "./all-modules";
-
+window["PokeRogue"] = PokeRogue;
 export type ModData = {
     id?: String;
     name?: String;
@@ -220,6 +220,7 @@ class Script {
 
   set code(newCode: String) {
     this._code = newCode;
+    LoaderData.setData(`JSBeautified|${this.id}`, undefined, false);
     this.reload();
   }
 

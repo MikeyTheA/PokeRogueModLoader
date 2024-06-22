@@ -8,7 +8,6 @@ export const showModList = () => {
     ImGui.BeginGroup();
 
     ImGui.BeginChild("ModSelectorPane##ModList", new ImGui.Vec2(140, 0), true);
-
     modsHandler.mods.forEach((mod, modorder) => {
       if (ImGui.Selectable(`${mod.name}##ModIdSelectable${mod.id}`, selectedModId === mod.id)) {
         LoaderData.setData("selectedModId", mod.id, false);
@@ -191,9 +190,86 @@ export const showScript = () => {
     if (mod) {
       const script = mod.scripts.find((scriptsearch) => scriptsearch.id === selectedScriptId);
       if (script) {
-        const formatted = js_beautify(script.code, { indent_size: 2, space_in_empty_paren: true });
-        ImGui.Text(formatted);
+        const formatted = LoaderData.getData(`JSBeautified|${script.id}`, undefined, false) || js_beautify(script.code, { indent_size: 2, space_in_empty_paren: true });
+        LoaderData.setData(`JSBeautified|${script.id}`, formatted, false);
+        codeHighlighting(script.code, 6, 20);
       }
     }
   }
 };
+
+const codeEditorTheme = {
+  plain: [255, 255, 255, 255],
+  cdata: [112, 128, 144, 255],
+  comment: [112, 128, 144, 255],
+  doctype: [112, 128, 144, 255],
+  prolog: [112, 128, 144, 255],
+  punctuation: [153, 153, 153, 255],
+  boolean: [153, 0, 85, 255],
+  constant: [153, 0, 85, 255],
+  deleted: [153, 0, 85, 255],
+  number: [153, 0, 85, 255],
+  property: [153, 0, 85, 255],
+  symbol: [153, 0, 85, 255],
+  tag: [153, 0, 85, 255],
+  attr_name: [102, 153, 0, 255],
+  builtin: [102, 153, 0, 255],
+  char: [102, 153, 0, 255],
+  inserted: [102, 153, 0, 255],
+  selector: [102, 153, 0, 255],
+  string: [154, 110, 58, 255],
+  entity: [154, 110, 58, 255],
+  operator: [154, 110, 58, 255],
+  url: [154, 110, 58, 255],
+  atrule: [0, 119, 170, 255],
+  attr_value: [0, 119, 170, 255],
+  keyword: [0, 119, 170, 255],
+  class_name: [221, 74, 104, 255],
+  function: [221, 74, 104, 255],
+  important: [238, 153, 0, 255],
+  regex: [238, 153, 0, 255],
+  variable: [238, 153, 0, 255],
+};
+
+function codeHighlighting(code: String, x: number, y: number) {
+  const highlightedHTML = Prism.highlight(code, Prism.languages.javascript, "javascript");
+  const lineHeight = ImGui.GetTextLineHeight();
+
+  highlightedHTML.split("\n").forEach((line, index) => {
+    const leadingWhitespace = line.match(/^\s*/)[0];
+
+    let tabCount = 0;
+    let spaceCount = 0;
+    for (let i = 0; i < leadingWhitespace.length; i++) {
+      if (leadingWhitespace[i] === "\t") {
+        tabCount++;
+      } else if (leadingWhitespace[i] === " ") {
+        spaceCount++;
+      } else {
+        break;
+      }
+    }
+    ImGui.SetCursorPos(new ImGui.Vec2(x + ImGui.CalcTextSize("    ".repeat(tabCount)).x + ImGui.CalcTextSize(" ".repeat(spaceCount)).x, y + index * lineHeight));
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(line, "text/html");
+
+    let currentX = x;
+
+    doc.body.childNodes.forEach((node) => {
+      const text = node.textContent || "";
+      const className = (node as any).className;
+
+      let color = codeEditorTheme["plain"];
+      if (className && codeEditorTheme[className.split(" ")[1]]) {
+        color = codeEditorTheme[className.split(" ")[1]];
+      }
+
+      ImGui.PushStyleColor(ImGui.ImGuiCol.Text, ImGui.IM_COL32(...color));
+      ImGui.SetCursorPos(new ImGui.Vec2(currentX + ImGui.CalcTextSize("    ".repeat(tabCount)).x + ImGui.CalcTextSize(" ".repeat(spaceCount)).x, y + index * lineHeight));
+      ImGui.Text(text);
+      currentX += ImGui.CalcTextSize(text).x;
+      ImGui.PopStyleColor();
+    });
+  });
+}

@@ -4,6 +4,8 @@ import { showModList, showScript } from "./modList";
 import { windowHandler } from "./windows";
 import { ExternalHandler } from "./external";
 import { ModsHandler } from "./mod";
+import BattleScene from "../../battle-scene";
+import { showModBrowser } from "./modBrowser";
 
 export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
@@ -21,7 +23,6 @@ const startModLoader = async () => {
   };
   resize();
   window.addEventListener("resize", resize);
-  window.addEventListener("visibilitychange", resize);
 
   ImGui.CreateContext();
   ImGui_Impl.Init(canvas);
@@ -48,6 +49,7 @@ const startModLoader = async () => {
   );
 
   windowHandler.addWindow("Mod list", showModList, {}, "modlist");
+  windowHandler.addWindow("Mod browser", showModBrowser, {}, "modbrowser");
 
   windowHandler.addWindow(
     "Script peeker",
@@ -60,12 +62,13 @@ const startModLoader = async () => {
   );
 
   modsHandler.load();
+  externalHandler.connect();
 
   window.requestAnimationFrame(_loop);
 
   function _loop(time: Number) {
     const battleScene = getBattleScene();
-    if (LoaderData.getData("phaseHooksDone", false, false) === false && battleScene !== undefined && battleScene.pushPhase) {
+    if (LoaderData.getData("phaseHooksDone", false, false) === false && battleScene && battleScene.pushPhase) {
       const originalPushPhase = battleScene.pushPhase;
       const originalUnshiftPhase = battleScene.unshiftPhase;
       const originalOverridePhase = battleScene.overridePhase;
@@ -117,6 +120,14 @@ const startModLoader = async () => {
 
     ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
 
+    if (battleScene && battleScene.input) {
+      if (IO.WantCaptureKeyboard) {
+        battleScene.input.keyboard.enabled = false;
+      } else {
+        battleScene.input.keyboard.enabled = true;
+      }
+    }
+
     if (IO.WantCaptureMouse) {
       // allow interacting with ImGui and also PokeRogue
       canvas.style.pointerEvents = "auto";
@@ -162,7 +173,7 @@ const startModLoader = async () => {
 
   const getBattleScene = () => {
     if (window.Phaser && Phaser.Display && Phaser.Display.Canvas && Phaser.Display.Canvas.CanvasPool && (Phaser.Display.Canvas.CanvasPool as any).pool[1] && (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent && (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent.scene) {
-      return (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent.scene;
+      return (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent.scene as BattleScene;
     }
     return false;
   };
