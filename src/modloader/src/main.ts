@@ -12,6 +12,17 @@ LoaderData.loadPersistentData();
 export const modsHandler = new ModsHandler();
 export const externalHandler = new ExternalHandler(5828);
 
+const oldFetch = fetch;
+window["fetch"] = (input: RequestInfo, init: RequestInit): Promise<Response> => {
+  if (init && init.headers) {
+    init.headers["Origin"] = "https://pokerogue.net";
+    init.headers["Referer"] = "https://pokerogue.net/";
+    console.log(init);
+  }
+
+  return oldFetch(input, init);
+};
+
 const startModLoader = async () => {
   await ImGui.default();
   const canvas: HTMLCanvasElement = document.getElementById("ImGuiCanvas") as HTMLCanvasElement;
