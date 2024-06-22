@@ -34,20 +34,22 @@ function generateImportStatements(dir) {
         .replace(/\.(ts|js)$/, "");
       currentNum += 1;
 
-      const importStatement = `import * as a${currentNum} from '../../${cleanPath}';\n`;
+      const importStatement = `import * as ashash${currentNum} from '../../${cleanPath}';\n`;
       imports += importStatement;
 
       // Extract default export name from TypeScript file
       const defaultExportName = getDefaultExportName(fullPath);
       if (defaultExportName) {
-        imports += `const ${defaultExportName} = a${currentNum}.default;\n`;
+        imports += `const ${defaultExportName} = ashash${currentNum}.default;\n`;
       }
 
       const dirKey = path.dirname(cleanPath).replace(/\\/g, "/");
       if (!directoryImports[dirKey]) {
         directoryImports[dirKey] = [];
       }
-      directoryImports[dirKey].push(`${defaultExportName || `a${currentNum}`}`);
+      directoryImports[dirKey].push(
+        `${defaultExportName || `ashash${currentNum}`}`
+      );
     }
   });
 
@@ -83,7 +85,9 @@ Object.entries(directoryImports).forEach(([dir, entries]) => {
   });
 
   entries.forEach((entry) => {
-    importStatements += `PokeRogue${pathString} = {...PokeRogue${pathString}, ${entry}};\n`;
+    importStatements += `PokeRogue${pathString} = {...PokeRogue${pathString}, ${
+      entry.startsWith("ashash") ? `...${entry}` : entry
+    }};\n`;
   });
 });
 
