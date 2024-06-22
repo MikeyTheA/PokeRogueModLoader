@@ -280,10 +280,10 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
 
 export const sessionIdKey = "pokerogue_sessionId";
 // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
-export const isLocal = (
+export const isLocal = true;/*(
   (window.location.hostname === "localhost" ||
    /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
-  window.location.port !== "") || window.location.hostname === "";
+  window.location.port !== "") || window.location.hostname === "";*/
 
 export const localServerUrl = import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port+1}`;
 
@@ -336,16 +336,6 @@ export function apiFetch(path: string, authed: boolean = false): Promise<Respons
       if (sId) {
         request["headers"] = { "Authorization": sId };
       }
-    }
-
-    if (request["headers"]) {
-      request["headers"]["Origin"] = "https://pokerogue.net";
-      request["headers"]["Referer"] = "https://pokerogue.net";
-    } else {
-      request["headers"] = {
-        Origin: "https://pokerogue.net",
-        Referer: "https://pokerogue.net",
-      };
     }
 
     fetch(`${apiUrl}/${path}`, request)
