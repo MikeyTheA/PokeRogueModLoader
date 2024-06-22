@@ -42,3 +42,5 @@ coverage
 /dependency-graph.svg
 
 src/modloader/src/all-modules.ts
+
+build

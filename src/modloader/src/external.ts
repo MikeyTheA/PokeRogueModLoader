@@ -57,12 +57,6 @@ export class ExternalHandler {
             modsHandler.addMod(mod);
           }
         });
-
-        modsHandler.mods.forEach((mod) => {
-          if (!data.find((modsearch) => modsearch.name === mod.name)) {
-            mod.delete();
-          }
-        });
       } else if (message.type === "update") {
       } else if (message.type === "newmod") {
         const existingMod = modsHandler.mods.find((modsearch) => modsearch.name === message.data && modsearch.github === false);
@@ -72,17 +66,17 @@ export class ExternalHandler {
           });
         }
       } else if (message.type === "deletemod") {
-        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data);
+        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data && !modsearch.github);
         if (mod) {
           mod.delete();
         }
       } else if (message.type === "addscript") {
-        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod);
+        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod && !modsearch.github);
         if (mod) {
           mod.addScript(message.data.script);
         }
       } else if (message.type === "deletescript") {
-        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod);
+        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod && !modsearch.github);
         if (mod) {
           const script = mod.scripts.find((scriptsearch) => scriptsearch.name === message.data.script);
           if (script) {
@@ -90,14 +84,14 @@ export class ExternalHandler {
           }
         }
       } else if (message.type === "updatemoddata") {
-        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod);
+        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod && !modsearch.github);
         if (mod) {
           mod.author = message.data.data.author || mod.author;
           mod.version = message.data.data.version || mod.version;
           mod.description = message.data.data.description || mod.description;
         }
       } else if (message.type === "updatescript") {
-        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod);
+        const mod = modsHandler.mods.find((modsearch) => modsearch.name === message.data.mod && !modsearch.github);
         if (mod) {
           const script = mod.scripts.find((scriptsearch) => scriptsearch.name === message.data.script.name);
           if (script) {

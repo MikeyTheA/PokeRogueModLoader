@@ -149,7 +149,11 @@ const startModLoader = async () => {
     modsHandler.mods.forEach((mod) => {
       mod.scripts.forEach((script) => {
         if (typeof script.sandbox.sandboxWindow.onPhasePush === "function") {
-          script.sandbox.sandboxWindow.onPhasePush(phase);
+          try {
+            script.sandbox.sandboxWindow.onPhasePush(phase);
+          } catch (e) {
+            script.sandbox.sandboxWindow.error(`error on window.onPhasePush: ${e.message}`);
+          }
         }
       });
     });
@@ -177,6 +181,8 @@ const startModLoader = async () => {
     }
     return false;
   };
+
+  window["getBattleScene"] = getBattleScene;
 };
 
 export default startModLoader;

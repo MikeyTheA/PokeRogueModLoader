@@ -149,6 +149,11 @@ class Script {
         logs.push(["log", message]);
         LoaderData.setData(`LogsForMod${this.mod.id}`, logs);
       },
+      error: (message: String) => {
+        const logs = LoaderData.getData(`LogsForMod${this.mod.id}`, [], false);
+        logs.push(["error", message]);
+        LoaderData.setData(`LogsForMod${this.mod.id}`, logs);
+      },
       getBattleScene: () => {
         if (window.Phaser && Phaser.Display && Phaser.Display.Canvas && Phaser.Display.Canvas.CanvasPool && (Phaser.Display.Canvas.CanvasPool as any).pool[1] && (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent && (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent.scene) {
           return (Phaser.Display.Canvas.CanvasPool as any).pool[1].parent.scene;

@@ -1,4 +1,5 @@
 import { LoaderData, modsHandler } from "./main";
+import { requestInformation } from "./networking";
 
 export const showModList = () => {
   const selectedModId = LoaderData.getData("selectedModId", undefined, false);
@@ -65,7 +66,7 @@ export const showModList = () => {
             if (modData.version !== mod.version && !LoaderData.getData(`modbrowser|${modData.url}|downloading`, false, false) && ImGui.Button("Update")) {
               LoaderData.setData(`modbrowser|${modData.url}|downloading`, true, false);
               modData.scripts.forEach((script) => {
-                //requestInformation(script.download_url, LoaderData, `scriptdownloads2|${modData.url}|${script.name}`);
+                requestInformation(script.download_url, `scriptdownloads2|${modData.url}|${script.name}`, false);
               });
             }
 
