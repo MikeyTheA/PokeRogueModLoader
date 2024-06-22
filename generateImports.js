@@ -37,15 +37,35 @@ function generateImportStatements(dir) {
       const importStatement = `import * as a${currentNum} from '../../${cleanPath}';\n`;
       imports += importStatement;
 
+      // Extract default export name from TypeScript file
+      const defaultExportName = getDefaultExportName(fullPath);
+      if (defaultExportName) {
+        imports += `const ${defaultExportName} = a${currentNum}.default;\n`;
+      }
+
       const dirKey = path.dirname(cleanPath).replace(/\\/g, "/");
       if (!directoryImports[dirKey]) {
         directoryImports[dirKey] = [];
       }
-      directoryImports[dirKey].push(`a${currentNum}`);
+      directoryImports[dirKey].push(`${defaultExportName || `a${currentNum}`}`);
     }
   });
 
   return imports;
+}
+
+function getDefaultExportName(filePath) {
+  try {
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    const defaultExportRegex = /export default\s+class\s+(\w+)/;
+    const match = fileContent.match(defaultExportRegex);
+    if (match) {
+      return match[1];
+    }
+  } catch (err) {
+    console.error(`Error reading file ${filePath}:`, err);
+  }
+  return null;
 }
 
 let importStatements = generateImportStatements(srcDir);
@@ -63,11 +83,15 @@ Object.entries(directoryImports).forEach(([dir, entries]) => {
   });
 
   entries.forEach((entry) => {
-    importStatements += `PokeRogue${pathString} = {...PokeRogue${pathString}, ...${entry}};\n`;
+    importStatements += `PokeRogue${pathString} = {...PokeRogue${pathString}, ${entry}};\n`;
   });
 });
 
 importStatements += "export default PokeRogue;\n";
 
-fs.writeFileSync(outputFile, importStatements);
-console.log(`All modules imported and exported in: ${outputFile}`);
+try {
+  fs.writeFileSync(outputFile, importStatements);
+  console.log(`All modules imported and exported in: ${outputFile}`);
+} catch (err) {
+  console.error("Error while writing to outputFile:", err);
+}
