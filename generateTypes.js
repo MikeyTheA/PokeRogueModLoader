@@ -11,7 +11,7 @@ const outputFile = path.resolve(__dirname, "dist", "globals.d.ts");
 const excludeDir = ["modloader", "test"];
 
 function adjustImportPath(filePath, importPath) {
-  const buildDir = "C:\\Projects\\pokeroguemodloader\\build";
+  const buildDir = srcDir;
   const relativeFilePath = path.relative(buildDir, filePath);
   const fileDir = path.dirname(relativeFilePath);
 
