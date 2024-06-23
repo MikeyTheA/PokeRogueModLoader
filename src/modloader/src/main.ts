@@ -40,11 +40,13 @@ const startModLoader = async () => {
   });
 
   windowHandler.addWindow(
-    "serverbrowser",
+    "Server browser",
     showServerBrowser,
     {
       open: true,
       persistentOpen: true,
+      initialHeight: 200,
+      initialWidth: 200
     },
     "serverbrowser"
   );
