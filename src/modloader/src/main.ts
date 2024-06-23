@@ -6,7 +6,7 @@ import { ExternalHandler } from "./external";
 import { ModsHandler } from "./mod";
 import BattleScene from "../../battle-scene";
 import { showModBrowser } from "./modBrowser";
-import { initServer, showServerBrowser } from "./server-browser";
+import { initServer, showServerBrowser } from "./serverBrowser";
 
 export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
