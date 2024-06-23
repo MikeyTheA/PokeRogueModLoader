@@ -17,11 +17,13 @@ function adjustImportPath(filePath, importPath) {
 
   const absoluteImportPath = path.resolve(fileDir, importPath);
 
-  const adjustedImportPath = path.relative("", absoluteImportPath);
+  const adjustedImportPath = path
+    .relative("", absoluteImportPath)
+    .replace(/\\/g, "/");
 
   return adjustedImportPath.startsWith(".")
     ? adjustedImportPath
-    : ".\\" + adjustedImportPath;
+    : "./" + adjustedImportPath;
 }
 
 const walkDir = (dir, callback, namespacePrefix = "") => {
@@ -75,8 +77,9 @@ walkDir(srcDir, (filePath, namespacePrefix) => {
         importPath = `.enums${importPath}`;
       } else {
         importPath = adjustImportPath(filePath, importPath);
+        console.log(importPath);
         importPath = importPath.slice(1);
-        importPath = importPath.split("\\");
+        importPath = importPath.split("/");
         importPath.pop();
         importPath = importPath.join(".");
       }
