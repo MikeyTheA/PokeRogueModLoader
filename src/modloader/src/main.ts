@@ -78,7 +78,7 @@ const startModLoader = async () => {
   modsHandler.load();
   externalHandler.connect();
 
-  canvas.addEventListener("touchstart", (e) => {
+  document.addEventListener("touchstart", (e) => {
     // Convert touch event to ImGui mouse event
     const touch = e.touches[0];
     IO.MouseDown[0] = true;
@@ -86,13 +86,13 @@ const startModLoader = async () => {
     IO.MousePos.y = touch.clientY;
   });
 
-  canvas.addEventListener("touchmove", (e) => {
+  document.addEventListener("touchmove", (e) => {
     const touch = e.touches[0];
     IO.MousePos.x = touch.clientX;
     IO.MousePos.y = touch.clientY;
   });
 
-  canvas.addEventListener("touchend", () => {
+  document.addEventListener("touchend", () => {
     IO.MouseDown[0] = false;
   });
 
