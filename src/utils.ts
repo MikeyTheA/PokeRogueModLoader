@@ -280,18 +280,19 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
 
 export const sessionIdKey = "pokerogue_sessionId";
 // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
-export const isLocal = (
-  (window.location.hostname === "localhost" ||
-   /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
-  window.location.port !== "") || window.location.hostname === "";
+export let isLocal = false
 
-export const localServerUrl = import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port+1}`;
+export const localServerUrl = undefined//import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port+1}`;
 
 // Set the server URL based on whether it's local or not
 export const serverUrl = isLocal ? localServerUrl : "";
-export const apiUrl = isLocal ? serverUrl : "https://api.pokerogue.net";
+export let apiUrl = isLocal ? serverUrl : "https://api.pokerogue.net";
 // used to disable api calls when isLocal is true and a server is not found
-export let isLocalServerConnected = true;
+export let isLocalServerConnected = false;
+
+export function setApiUrl(url: string){
+  apiUrl = url
+}
 
 export function setCookie(cName: string, cValue: string): void {
   const expiration = new Date();

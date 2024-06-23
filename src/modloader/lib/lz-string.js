@@ -1,4 +1,4 @@
-var LZString = (function () {
+export default (function () {
     var r = String.fromCharCode,
         o = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
         n = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$',
@@ -222,5 +222,3 @@ var LZString = (function () {
       angular.module('LZString', []).factory('LZString', function () {
           return LZString;
       });
-
-export default LZString;
