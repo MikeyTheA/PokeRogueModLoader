@@ -3,7 +3,7 @@ import { windowHandler } from "./windows";
 import { Window } from "./windows";
 
 export const showMainMenu = () => {
-  ImGui.Text(LoaderData.getData("Amount", 0, false));
+  ImGui.Text(String(LoaderData.getData("Amount", 0, false)));
 
   ImGui.Text("Originally made by MikeyTheA");
 
