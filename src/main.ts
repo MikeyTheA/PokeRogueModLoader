@@ -166,7 +166,9 @@ document.fonts
 let game;
 
 const startGame = async () => {
-  await startModLoader();
+  if (await startModLoader() === false) {
+    return;
+  }
 
   game = new Phaser.Game(config);
   game.sound.pauseOnBlur = false;

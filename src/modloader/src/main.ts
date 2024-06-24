@@ -13,8 +13,12 @@ LoaderData.loadPersistentData();
 export const modsHandler = new ModsHandler();
 export const externalHandler = new ExternalHandler(5828);
 
-const startModLoader = async () => {
+const startModLoader: () => Promise<boolean> = async () => {
   LoaderData.setData("Amount", LoaderData.getData("Amount", 0, false) + 1, false);
+
+  if (LoaderData.getData("Amount", 0, false) > 1) {
+    return false;
+  }
 
   initServer();
   await ImGui.default();
@@ -218,6 +222,8 @@ const startModLoader = async () => {
   };
 
   window["getBattleScene"] = getBattleScene;
+
+  return true;
 };
 
 export default startModLoader;
