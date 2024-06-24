@@ -10,6 +10,11 @@ import { LoadingScene } from "./loading-scene";
 
 import startModLoader from "./modloader/src/main";
 
+if (window["alreadyloaded"]) {
+  throw new Error("Already loaded");
+}
+window["alreadyloaded"] = true;
+
 // Catch global errors and display them in an alert so users can report the issue.
 window.onerror = function (message, source, lineno, colno, error) {
   console.error(error);
