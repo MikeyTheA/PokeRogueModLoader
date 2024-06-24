@@ -14,6 +14,8 @@ export const modsHandler = new ModsHandler();
 export const externalHandler = new ExternalHandler(5828);
 
 const startModLoader = async () => {
+  LoaderData.setData("Amount", LoaderData.getData("Amount", 0, false) + 1, false);
+
   initServer();
   await ImGui.default();
   const canvas: HTMLCanvasElement = document.getElementById("ImGuiCanvas") as HTMLCanvasElement;
