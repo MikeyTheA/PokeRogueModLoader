@@ -1,4 +1,4 @@
-import LZString from "../lib/lz-string.js";
+import LZstring from "../lib/lz-string.js";
 
 import StaticManager from "./data";
 import { LoaderData } from "./main";
@@ -8,22 +8,22 @@ import { WindowFlags, windowHandler } from "./windows";
 import PokeRogue from "./all-modules";
 window["PokeRogue"] = PokeRogue;
 export type ModData = {
-  id?: String;
-  name?: String;
-  description?: String;
-  author?: String;
-  version?: Number;
+  id?: string;
+  name?: string;
+  description?: string;
+  author?: string;
+  version?: number;
   scripts?: Array<ScriptData>;
 };
 
 export type ScriptData = {
-  id?: String;
-  name?: String;
-  code?: String;
+  id?: string;
+  name?: string;
+  code?: string;
 };
 
 export type Hook = {
-  phase: String;
+  phase: string;
   func: Function;
 };
 
@@ -40,7 +40,7 @@ export class ModsHandler {
     this.save();
   }
 
-  deleteMod(id: String) {
+  deleteMod(id: string) {
     const mod = this.getMod(id);
     if (mod) {
       mod.delete();
@@ -50,13 +50,13 @@ export class ModsHandler {
     }
   }
 
-  getMod(id: String) {
+  getMod(id: string) {
     return this.mods.find((mod) => mod.id === id);
   }
 
   save() {
     const mods = this.compress();
-    localStorage.setItem("MokeRogueMods", LZString.compressToUTF16(JSON.stringify(mods)));
+    localStorage.setItem("MokeRogueMods", LZstring.compressToUTF16(JSON.stringify(mods)));
     return true;
   }
 
@@ -78,7 +78,7 @@ export class ModsHandler {
   }
 
   load() {
-    const mods = LZString.decompressFromUTF16(localStorage.getItem("MokeRogueMods"));
+    const mods = LZstring.decompressFromUTF16(localStorage.getItem("MokeRogueMods"));
     if (mods) {
       const parsedMods: Array<ModData> = JSON.parse(mods);
       parsedMods.map((modData) => this.addMod(modData));
@@ -87,16 +87,16 @@ export class ModsHandler {
 }
 
 class Mod {
-  public id: String;
-  public name: String;
-  public description: String;
-  public author: String;
-  public version: Number;
+  public id: string;
+  public name: string;
+  public description: string;
+  public author: string;
+  public version: number;
   public scripts: Array<Script>;
   public modsHandler: ModsHandler;
   public data: StaticManager;
 
-  public github: Boolean;
+  public github: boolean;
 
   constructor(data: ModData, modsHandler: ModsHandler) {
     this.id = data.id || crypto.randomUUID();
@@ -124,15 +124,15 @@ class Mod {
     this.modsHandler.save();
   }
 
-  deleteScript(id: String) {
+  deleteScript(id: string) {
     this.scripts.find((script) => script.id !== id).delete();
   }
 }
 
 class Script {
-  public id: String;
-  public name: String;
-  private _code: String;
+  public id: string;
+  public name: string;
+  private _code: string;
   public hooks: Array<Hook>;
   public mod: Mod;
   public sandbox: Sandbox;
@@ -147,12 +147,12 @@ class Script {
       ImGui: ImGui,
       data: this.mod.data,
       globalData: new StaticManager("global"),
-      log: (message: String) => {
+      log: (message: string) => {
         const logs = LoaderData.getData(`LogsForMod${this.mod.id}`, [], false);
         logs.push(["log", message]);
         LoaderData.setData(`LogsForMod${this.mod.id}`, logs);
       },
-      error: (message: String) => {
+      error: (message: string) => {
         const logs = LoaderData.getData(`LogsForMod${this.mod.id}`, [], false);
         logs.push(["error", message]);
         LoaderData.setData(`LogsForMod${this.mod.id}`, logs);
@@ -163,10 +163,10 @@ class Script {
         }
         return false;
       },
-      addWindow: (name: String, show: Function, flags: WindowFlags) => {
+      addWindow: (name: string, show: Function, flags: WindowFlags) => {
         windowHandler.addWindow(name, show, flags, `${this.id}|${this.name}`);
       },
-      hook: (phase: String, func: Function) => {
+      hook: (phase: string, func: Function) => {
         this.hooks.push({ phase: phase, func: func });
       },
       getInstalledMods: () => {
@@ -211,7 +211,7 @@ class Script {
     this.mod.modsHandler.save();
   }
 
-  set code(newCode: String) {
+  set code(newCode: string) {
     this._code = newCode;
     LoaderData.setData(`JSBeautified|${this.id}`, undefined, false);
     this.reload();

@@ -4,7 +4,7 @@ const _staticMap = new Map();
 const _persistentMap = new Map();
 
 export type Listener = {
-  id: String;
+  id: string;
   listener: Function;
 };
 
@@ -20,7 +20,7 @@ class Static {
   }
 
   access = (value: any = this.value) => {
-    const changed: Boolean = this.value !== value;
+    const changed: boolean = this.value !== value;
     this.value = value;
 
     if (changed) {
@@ -34,14 +34,14 @@ class Static {
     return this.value;
   };
 
-  addListener(listener: Function, identifier: String) {
+  addListener(listener: Function, identifier: string) {
     this.listeners.push({
       listener: listener,
       id: identifier,
     });
   }
 
-  removeListener(identifier: String) {
+  removeListener(identifier: string) {
     const listener = this.listeners.findIndex((lis) => lis.id === identifier);
     if (listener) {
       delete this.listeners[listener];
@@ -49,20 +49,20 @@ class Static {
   }
 
   notifyListeners() {
-    this.listeners.forEach((listener: { listener: Function; id: String }) => {
+    this.listeners.forEach((listener: { listener: Function; id: string }) => {
       listener.listener(this.value);
     });
   }
 }
 
 export default class StaticManager {
-  private prefix: String;
+  private prefix: string;
 
-  constructor(prefix: String = "") {
+  constructor(prefix: string = "") {
     this.prefix = prefix;
   }
 
-  private getStatic(key: String, init: any, persistent: Boolean = false): Static {
+  private getStatic(key: string, init: any, persistent: boolean = false): Static {
     const map = persistent ? _persistentMap : _staticMap;
     const fullKey = this.prefix ? `${this.prefix}/${key}` : key;
 
@@ -73,15 +73,15 @@ export default class StaticManager {
     return map.get(fullKey);
   }
 
-  getData(key: String, init: any, persistent: Boolean = false) {
+  getData(key: string, init: any, persistent: boolean = false) {
     return this.getStatic(key, init, persistent).value;
   }
 
-  setData(key: String, value: any, persistent: Boolean = false) {
+  setData(key: string, value: any, persistent: boolean = false) {
     this.getAccess(key, value, persistent)(value);
   }
 
-  getAccess(key: String, init: any, persistent: Boolean = false) {
+  getAccess(key: string, init: any, persistent: boolean = false) {
     return this.getStatic(key, init, persistent).access;
   }
 
@@ -110,13 +110,13 @@ export default class StaticManager {
     }
   }
 
-  addListener(key: String, init: any, listener: Function, persistent: Boolean = false, identifier: String = crypto.randomUUID()) {
+  addListener(key: string, init: any, listener: Function, persistent: boolean = false, identifier: string = crypto.randomUUID()) {
     const staticInstance = this.getStatic(key, init, persistent);
     staticInstance.addListener(listener, identifier);
   }
 
-  cleanListeners(identifier: String) {
-    const removeListeners = (map: Map<String, Static>) => {
+  cleanListeners(identifier: string) {
+    const removeListeners = (map: Map<string, Static>) => {
       for (const [, staticInstance] of map.entries()) {
         staticInstance.listeners.forEach((listener, index) => {
           if (listener.id === identifier) {

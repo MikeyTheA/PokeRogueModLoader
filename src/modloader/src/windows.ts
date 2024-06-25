@@ -1,20 +1,20 @@
 import { LoaderData } from "./main";
 
 export type Window = {
-    identifier: String;
-    name: String;
-    show: Function;
-    flags: WindowFlags;
+  identifier: string;
+  name: string;
+  show: Function;
+  flags: WindowFlags;
 };
 
 export type WindowFlags = {
-    open?: Boolean;
-    persistentOpen?: Boolean;
-    hidden?: Boolean;
-    noClose?: Boolean;
-    initialWidth?: Number;
-    initialHeight?: Number;
-    scriptId?: Number;
+  open?: boolean;
+  persistentOpen?: boolean;
+  hidden?: boolean;
+  noClose?: boolean;
+  initialWidth?: number;
+  initialHeight?: number;
+  scriptId?: number;
 };
 
 export class WindowHandler {
@@ -24,7 +24,7 @@ export class WindowHandler {
     this.Windows = [];
   }
 
-  addWindow(name: String, show: Function, flags: WindowFlags, identifier: String = crypto.randomUUID()) {
+  addWindow(name: string, show: Function, flags: WindowFlags, identifier: string = crypto.randomUUID()) {
     const window: Window = {
       identifier: identifier || crypto.randomUUID(),
       name: name,
@@ -45,7 +45,7 @@ export class WindowHandler {
     this.Windows.forEach((window: Window) => {
       ImGui.SetNextWindowSize(new ImGui.Vec2(window.flags.initialWidth, window.flags.initialHeight), ImGui.Cond.FirstUseEver);
       const windowOpen: Function = LoaderData.getAccess(`WindowOpenState${window.identifier}`, window.flags.open, window.flags.persistentOpen);
-      if ((windowOpen() as Boolean) && ImGui.Begin(window.name, (!window.flags.noClose && windowOpen) || undefined)) {
+      if ((windowOpen() as boolean) && ImGui.Begin(window.name, (!window.flags.noClose && windowOpen) || undefined)) {
         try {
           window.show();
         } catch (e) {
