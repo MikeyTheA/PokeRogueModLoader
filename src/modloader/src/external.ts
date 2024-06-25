@@ -24,14 +24,15 @@ export class ExternalHandler {
 
     this.webSocket.onmessage = (event) => {
       const message = JSON.parse(event.data);
+
       if (message.type === "connect") {
+        const data: Array<ModData> = message.data;
         modsHandler.mods
-          .filter((mod) => mod.github === false)
+          .filter((mod) => mod.github === false && !data.find(datamod => datamod.name === mod.name))
           .forEach((mod) => {
             mod.delete();
           });
 
-        const data: Array<ModData> = message.data;
         data.forEach((mod: ModData) => {
           const existingMod = modsHandler.mods.find((modsearch) => modsearch.name === mod.name && modsearch.github === false);
           if (existingMod) {

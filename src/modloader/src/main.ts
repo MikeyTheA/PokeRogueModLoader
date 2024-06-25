@@ -137,7 +137,12 @@ const startModLoader: () => Promise<boolean> = async () => {
     modsHandler.mods.forEach((mod) => {
       mod.scripts.forEach((script) => {
         if (script.sandbox.sandboxWindow.update) {
-          script.sandbox.sandboxWindow.update();
+          try {
+            script.sandbox.sandboxWindow.update();
+          } catch (e) {
+            script.sandbox.sandboxWindow.error(e.message);
+          }
+
         }
       });
     });

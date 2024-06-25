@@ -123,7 +123,7 @@ export const showModList = () => {
         mod.scripts.forEach((script) => {
           ImGui.Text(`${script.name}`);
           ImGui.SameLine();
-          if (ImGui.SmallButton("Peek")) {
+          if (ImGui.SmallButton(`Peek##${script.id}`)) {
             LoaderData.setData("selectedModIdShowScript", mod.id);
             LoaderData.setData("selectedScriptIdShowScript", script.id);
             LoaderData.setData("WindowOpenStatescriptpeeker", true);
@@ -143,16 +143,16 @@ export const showModList = () => {
         logs.forEach((log, logindex) => {
           if (log[0] === "log" && typeof log[1] === "object") {
             if (ImGui.TreeNode(`${log[1].constructor.name}##Logs${logindex}`)) {
-              /*treeObject(log[1], logindex);
+              treeObject(log[1], logindex);
 
-                            if (ImGui.TreeNode(`Prototypes##${log[1].constructor.name}${logindex}`)) {
-                                let proto = Object.getPrototypeOf(log[1]);
-                                while (proto) {
-                                    treeObject(proto, logindex);
-                                    proto = Object.getPrototypeOf(proto);
-                                }
-                                ImGui.TreePop();
-                            }*/
+              if (ImGui.TreeNode(`Prototypes##${log[1].constructor.name}${logindex}`)) {
+                let proto = Object.getPrototypeOf(log[1]);
+                while (proto) {
+                  treeObject(proto, logindex);
+                  proto = Object.getPrototypeOf(proto);
+                }
+                ImGui.TreePop();
+              }
 
               ImGui.TreePop();
             }
@@ -273,4 +273,19 @@ function codeHighlighting(code: String, x: number, y: number) {
       ImGui.PopStyleColor();
     });
   });
+}
+
+function treeObject(obj: Object, index: number, path = "") {
+  for (const key of Object.getOwnPropertyNames(obj)) {
+    const value = obj[key];
+    const fullPath = path + key;
+    if (typeof value === "object" && value !== null) {
+      if (ImGui.TreeNode(`${key}##TreeObject${fullPath}${index}`)) {
+        treeObject(value, index, fullPath + ".");
+        ImGui.TreePop();
+      }
+    } else {
+      ImGui.Text(`${key}: ${value} (${typeof value})`);
+    }
+  }
 }

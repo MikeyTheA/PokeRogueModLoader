@@ -4,8 +4,8 @@ const _staticMap = new Map();
 const _persistentMap = new Map();
 
 export type Listener = {
-    id: String;
-    listener: Function;
+  id: String;
+  listener: Function;
 };
 
 class Static {
@@ -99,10 +99,11 @@ export default class StaticManager {
   }
 
   loadPersistentData() {
-    const savedData = LZString.decompressFromUTF16(localStorage.getItem("MokeRoguePersistentData"));
+    const savedData = localStorage.getItem("MokeRoguePersistentData");
 
     if (savedData) {
-      const data = JSON.parse(savedData);
+      const data = JSON.parse(LZString.decompressFromUTF16(savedData));
+      console.log(data);
       for (const key in data) {
         _persistentMap.set(key, new Static(data[key], this.savePersistentData));
       }

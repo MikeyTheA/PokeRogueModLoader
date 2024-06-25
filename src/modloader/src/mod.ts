@@ -8,23 +8,23 @@ import { WindowFlags, windowHandler } from "./windows";
 import PokeRogue from "./all-modules";
 window["PokeRogue"] = PokeRogue;
 export type ModData = {
-    id?: String;
-    name?: String;
-    description?: String;
-    author?: String;
-    version?: Number;
-    scripts?: Array<ScriptData>;
+  id?: String;
+  name?: String;
+  description?: String;
+  author?: String;
+  version?: Number;
+  scripts?: Array<ScriptData>;
 };
 
 export type ScriptData = {
-    id?: String;
-    name?: String;
-    code?: String;
+  id?: String;
+  name?: String;
+  code?: String;
 };
 
 export type Hook = {
-    phase: String;
-    func: Function;
+  phase: String;
+  func: Function;
 };
 
 export class ModsHandler {
@@ -94,6 +94,7 @@ class Mod {
   public version: Number;
   public scripts: Array<Script>;
   public modsHandler: ModsHandler;
+  public data: StaticManager;
 
   public github: Boolean;
 
@@ -104,6 +105,8 @@ class Mod {
     this.author = data.author || "Unknown author";
     this.version = data.version || 1;
     this.modsHandler = modsHandler;
+
+    this.data = new StaticManager(this.id);
 
     this.github = this.id.startsWith("https://github.com/");
     this.scripts = (data.scripts || []).map((scriptData) => new Script(scriptData, this));
@@ -133,18 +136,16 @@ class Script {
   public hooks: Array<Hook>;
   public mod: Mod;
   public sandbox: Sandbox;
-  public data: StaticManager;
 
   constructor(data: ScriptData, mod: Mod) {
     this.id = data.id || crypto.randomUUID();
     this.name = data.name || "Unnamed script";
     this.hooks = [];
     this.mod = mod;
-    this.data = new StaticManager(this.id);
 
     this.sandbox = new Sandbox({
       ImGui: ImGui,
-      data: this.data,
+      data: this.mod.data,
       globalData: new StaticManager("global"),
       log: (message: String) => {
         const logs = LoaderData.getData(`LogsForMod${this.mod.id}`, [], false);
@@ -201,7 +202,7 @@ class Script {
 
     windowHandler.Windows = windowHandler.Windows.filter((window) => !window.identifier.startsWith(this.id as string));
 
-    this.data.cleanListeners(this.id);
+    this.mod.data.cleanListeners(this.id);
   }
 
   delete() {
