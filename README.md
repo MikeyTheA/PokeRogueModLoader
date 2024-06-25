@@ -38,7 +38,7 @@ We're using ESLint as our common linter and formatter. It will run automatically
 ### ❔ FAQ 
 
 ## 🪧 To Do
-Check out [Github Issues](https://github.com/pagefaultgames/pokerogue/issues) to see how you can help us!
+Check out [Github Issues](https://github.com/MikeyTheA/PokeRogueModLoader/issues) to see how you can help us!
 
 ## Credits
 Check the [original PokeRogue repository](https://github.com/pagefaultgames/pokerogue/) to see PokeRogue credits, PokeRogueModLoader is mainly made by MikeyTheA 
