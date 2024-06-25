@@ -5,7 +5,7 @@ import imports from 'eslint-plugin-import';
 export default [ 
     {
         files: ["src/**/*.{ts,tsx,js,jsx}"],
-        ignores: ["dist/*", "build/*", "coverage/*", "public/*", ".github/*", "node_modules/*", ".vscode/*"],
+        ignores: ["dist/*", "build/*", "coverage/*", "public/*", ".github/*", "node_modules/*", ".vscode/*", "src/modloader/**"],
         languageOptions: {
             parser: parser
         },
