@@ -51,7 +51,7 @@ export const showModList = () => {
           ImGui.Text("URL: ");
           ImGui.SameLine();
           if (ImGui.SmallButton(mod.id)) {
-            window.open(mod.id as string);
+            window.open(mod.id);
           }
 
           const fullname = mod.id.replace("https://github.com/", "").split("/");
@@ -112,6 +112,12 @@ export const showModList = () => {
             ImGui.Text("Downloading mod information");
             //requestInformation(`/mod?name=${name}&author=${author}`, data, `modbrowser|moddata${name}${author}`, true);
           }
+
+
+          if (ImGui.Button("Remove")) {
+            mod.delete()
+          }
+
         }
         ImGui.EndTabItem();
       }
@@ -199,7 +205,13 @@ export const showScript = () => {
   }
 };
 
-const codeEditorTheme = {
+type ColorTuple = [number, number, number, number];
+
+type CodeEditorTheme = {
+  [key: string]: ColorTuple;
+};
+
+const codeEditorTheme: CodeEditorTheme = {
   plain: [255, 255, 255, 255],
   cdata: [112, 128, 144, 255],
   comment: [112, 128, 144, 255],
@@ -232,7 +244,7 @@ const codeEditorTheme = {
   variable: [238, 153, 0, 255],
 };
 
-function codeHighlighting(code: String, x: number, y: number) {
+function codeHighlighting(code: string, x: number, y: number) {
   const highlightedHTML = Prism.highlight(code, Prism.languages.javascript, "javascript");
   const lineHeight = ImGui.GetTextLineHeight();
 
@@ -261,7 +273,7 @@ function codeHighlighting(code: String, x: number, y: number) {
       const text = node.textContent || "";
       const className = (node as any).className;
 
-      let color = codeEditorTheme["plain"];
+      let color: [number, number, number, number] = codeEditorTheme["plain"];
       if (className && codeEditorTheme[className.split(" ")[1]]) {
         color = codeEditorTheme[className.split(" ")[1]];
       }

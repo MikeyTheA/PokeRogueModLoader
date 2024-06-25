@@ -21,7 +21,7 @@ export const showMainMenu = () => {
         return;
       }
       const windowOpen: Function = LoaderData.getAccess(`WindowOpenState${window.identifier}`, window.flags.open, window.flags.persistentOpen);
-      ImGui.Checkbox(`${window.name}`, windowOpen);
+      ImGui.Checkbox(`${window.name}`, windowOpen as ImGui.ImAccess<boolean>);
     });
   }
 };

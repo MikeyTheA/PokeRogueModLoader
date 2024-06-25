@@ -2,12 +2,12 @@ import { LoaderData, modsHandler } from "./main";
 import { ModData } from "./mod";
 
 export class ExternalHandler {
-  private port: Number;
+  private port: number;
   private webSocket: WebSocket;
   private retryInterval: number = 5000; // 5s
   private retryTimer: NodeJS.Timeout | null = null;
 
-  constructor(port: Number) {
+  constructor(port: number) {
     this.port = port;
   }
 

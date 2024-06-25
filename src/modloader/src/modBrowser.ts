@@ -2,8 +2,8 @@ import { LoaderData, modsHandler } from "./main";
 import { requestInformation } from "./networking";
 
 export type ModsBrowserMod = {
-    name: string;
-    author: string;
+  name: string;
+  author: string;
 };
 
 export const showModBrowser = () => {

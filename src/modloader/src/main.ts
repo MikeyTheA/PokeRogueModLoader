@@ -105,7 +105,7 @@ const startModLoader: () => Promise<boolean> = async () => {
 
   window.requestAnimationFrame(_loop);
 
-  function _loop(time: Number) {
+  function _loop(time: number) {
     const battleScene = getBattleScene();
     if (LoaderData.getData("phaseHooksDone", false, false) === false && battleScene && battleScene.pushPhase) {
       const originalPushPhase = battleScene.pushPhase;
