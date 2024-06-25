@@ -1,71 +1,44 @@
-# PokeRogueModLoader
+<picture><img src="./public/images/logo.png" width="300" alt="PokéRogue"></picture> <picture><img src="./public/images/moderogue-no-text4x.png" width="60" alt="PokéRogue"></picture>
+
 ![](https://img.shields.io/github/stars/MikeyTheA/PokeRogueModLoader) ![](https://img.shields.io/github/issues/MikeyTheA/PokeRogueModLoader) ![Discord](https://img.shields.io/discord/1251472855191916618)
 
-![Example](pictures/example.png)
 
-Mod loader for PokeRogue.net in the form of a browser extension.
+PokéRogue is a browser based Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, fighting trainers, bosses, and more!
+
+And PokeRogueModLoader is a mod loader for PokéRogue
+
+You can find a running instance of PokeRogueModLoader at [mokerogue.net](https://mokerogue.net/)
 
 Join our [Discord](https://discord.com/invite/M8suCFtF7c) for updates and help
 
-We also have a [Youtube tutorial](https://www.youtube.com/watch?v=L7SLeEB_W7I)
+# Contributing
 
-# Usage
-
-For installing the mod loader
-
-## Prerequisites
-
-* A browser capable of handling extensions (preferrably firefox, as it is what it has been tested on)
-
-## Installation
-
-Either
-1. Download the repository as a ZIP file
-
-	1.1 ![Download zip](pictures/downloadzip.png)
-
-	1.2 Extract the zip somewhere memorable
-2. Clone the repository
-
-	You need git installed for this
-
-	`git clone https://github.com/MikeyTheA/PokeRogueModLoader.git`
-
-Then, load the extension depending on your browser
-
-### Firefox
-
-1. Go to [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox)
-2. Click on "Load Temporary Add-on..."
-3. Select the manifest.json from where you cloned or extracted the repository
-4. Load up PokeRogue.net and the mod manager should pop up
-5. Remember that you will have to re-do this every time you restart the browser
-6. (If you have issues) go to pokerogue.net, then go to your addons popup menu from the puzzle piece next to your URL bar, find the loaded extension, right click it, and press "Always allow on Pokerogue.net"
-
-### Edge
-
-1. Go to [edge://extensions/](edge://extensions/)
-2. Press "Load unpacked"
-3. Select the folder where you extracted the mod loader with the manifest.json
-4. Load up PokeRogue.net and the mod manager should pop up
-
-### Other browsers
-
-Other browsers to be added, you can still attempt to load them, however nothing else has been officially tested.
-
-
-### Updating
-
-If you downloaded it as a zip, just do it the same way by download it, deleting the old files and extracting into the same folder.
-
-If you used git clone, cd into the directory where you cloned it, and `git pull`
-
-### For mod developers
-
+## Mod Development
 You can find the wiki [here](https://github.com/MikeyTheA/PokeRogueModLoader/wiki)
 
-### Frequently asked questions
+Use [PRModLoaderExternalEditor](https://github.com/MikeyTheA/PRModLoaderExternalEditor) for making mods, look in its readme to see how to publish a mod to the mod browser.
 
-Q: The UI is blurry, what do I do?
+## 🛠️ Mod Loader Development
+If you have the motivation and experience with Typescript/Javascript (or are willing to learn) please feel free to fork the repository and make pull requests with contributions. If you don't know what to work on but want to help, reference the below **To-Do** section or the **#feature-vote** channel in the discord. 
 
-A: Resize your browser for a second and it should adjust the resolution
+### 💻 Environment Setup
+#### Prerequisites
+- node: 20.13.1
+- npm: [how to install](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+#### Running Locally
+1. Clone the repo and in the root directory run `npm install`
+    - *if you run into any errors, reach out in the **#loader-development** channel in discord*
+2. Run `node generateImports.js`
+3. Run `npm run start:dev` to locally run the project in `localhost:8000`
+
+#### Linting
+We're using ESLint as our common linter and formatter. It will run automatically during the pre-commit hook but if you would like to manually run it, use the `npm run eslint` script. 
+
+### ❔ FAQ 
+
+## 🪧 To Do
+Check out [Github Issues](https://github.com/pagefaultgames/pokerogue/issues) to see how you can help us!
+
+## Credits
+Check the [original PokeRogue repository](https://github.com/pagefaultgames/pokerogue/) to see PokeRogue credits, PokeRogueModLoader is mainly made by MikeyTheA 
