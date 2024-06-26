@@ -164,7 +164,7 @@ class Script {
         return false;
       },
       addWindow: (name: string, show: Function, flags: WindowFlags) => {
-        windowHandler.addWindow(name, show, flags, `${this.id}|${this.name}`);
+        windowHandler.addWindow(name, show, flags, `${this.id}|${name}`);
       },
       hook: (phase: string, func: Function) => {
         this.hooks.push({ phase: phase, func: func });
@@ -177,6 +177,13 @@ class Script {
         }));
       },
       PokeRogue: PokeRogue,
+      getWindowOpenAccess: (windowName: string) => {
+        const window = windowHandler.Windows.find(window => window.name === windowName && window.identifier === `${this.id}|${windowName}`)
+        if (window) {
+          return LoaderData.getAccess(`WindowOpenState${this.id}|${windowName}`, window.flags.open, window.flags.persistentOpen)
+        }
+        return false
+      }
     });
 
     this.code = data.code || "print(\"Hello world!\")";

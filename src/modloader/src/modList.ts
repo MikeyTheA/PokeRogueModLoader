@@ -113,10 +113,13 @@ export const showModList = () => {
             //requestInformation(`/mod?name=${name}&author=${author}`, data, `modbrowser|moddata${name}${author}`, true);
           }
 
-
+          ImGui.PushStyleColor(ImGui.Col.Button, ImGui.IM_COL32(230, 0, 0, 255));
+          ImGui.PushStyleColor(ImGui.Col.ButtonHovered, ImGui.IM_COL32(150, 20, 20, 255));
           if (ImGui.Button("Remove")) {
             mod.delete()
           }
+          ImGui.PopStyleColor()
+          ImGui.PopStyleColor()
 
         }
         ImGui.EndTabItem();

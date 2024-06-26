@@ -44,7 +44,7 @@ export class WindowHandler {
   renderWindows() {
     this.Windows.forEach((window: Window) => {
       ImGui.SetNextWindowSize(new ImGui.Vec2(window.flags.initialWidth, window.flags.initialHeight), ImGui.Cond.FirstUseEver);
-      const windowOpen: Function = LoaderData.getAccess(`WindowOpenState${window.identifier}`, window.flags.open, window.flags.persistentOpen);
+      const windowOpen: (value?: boolean) => boolean = LoaderData.getAccess(`WindowOpenState${window.identifier}`, window.flags.open, window.flags.persistentOpen);
       if ((windowOpen() as boolean) && ImGui.Begin(window.name, (!window.flags.noClose && windowOpen) || undefined)) {
         try {
           window.show();
