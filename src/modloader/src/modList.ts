@@ -110,7 +110,7 @@ export const showModList = () => {
             }
           } else {
             ImGui.Text("Downloading mod information");
-            //requestInformation(`/mod?name=${name}&author=${author}`, data, `modbrowser|moddata${name}${author}`, true);
+            requestInformation(`/mod?name=${name}&author=${author}`, `modbrowser|moddata${name}${author}`, true);
           }
 
           ImGui.PushStyleColor(ImGui.Col.Button, ImGui.IM_COL32(230, 0, 0, 255));
