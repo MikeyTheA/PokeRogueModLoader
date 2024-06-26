@@ -12,6 +12,7 @@ export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
 export const modsHandler = new ModsHandler();
 export const externalHandler = new ExternalHandler(5828);
+export const supportsTouch = 'ontouchstart' in window;
 
 const startModLoader: () => Promise<boolean> = async () => {
   LoaderData.setData("Amount", LoaderData.getData("Amount", 0, false) + 1, false);
@@ -84,24 +85,6 @@ const startModLoader: () => Promise<boolean> = async () => {
   modsHandler.load();
   externalHandler.connect();
 
-  document.addEventListener("touchstart", (e) => {
-    // Convert touch event to ImGui mouse event
-    const touch = e.touches[0];
-    IO.MouseDown[0] = true;
-    IO.MousePos.x = touch.clientX;
-    IO.MousePos.y = touch.clientY;
-  });
-
-  document.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    IO.MousePos.x = touch.clientX;
-    IO.MousePos.y = touch.clientY;
-  });
-
-  document.addEventListener("touchend", () => {
-    IO.MouseDown[0] = false;
-  });
-
 
   window.requestAnimationFrame(_loop);
 
@@ -147,9 +130,13 @@ const startModLoader: () => Promise<boolean> = async () => {
       });
     });
 
-    const rect = canvas.getBoundingClientRect();
-    IO.MousePos.x = mousePos.x - rect.left; // For WantCaptureMouse to work
-    IO.MousePos.y = mousePos.y - rect.top;
+
+    if (!supportsTouch) {
+      const rect = canvas.getBoundingClientRect();
+      IO.MousePos.x = mousePos.x - rect.left; // For WantCaptureMouse to work
+      IO.MousePos.y = mousePos.y - rect.top;
+    }
+
     ImGui_Impl.NewFrame(time);
     ImGui.NewFrame();
 
@@ -166,20 +153,26 @@ const startModLoader: () => Promise<boolean> = async () => {
 
     ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
 
-    if (battleScene && battleScene.input) {
-      if (IO.WantCaptureKeyboard) {
-        battleScene.input.keyboard.enabled = false;
-      } else {
-        battleScene.input.keyboard.enabled = true;
+    if (!supportsTouch) {
+      if (battleScene && battleScene.input) {
+        if (IO.WantCaptureKeyboard) {
+          battleScene.input.keyboard.enabled = false;
+        } else {
+          battleScene.input.keyboard.enabled = true;
+        }
       }
     }
 
-    if (IO.WantCaptureMouse) {
-      // allow interacting with ImGui and also PokeRogue
-      canvas.style.pointerEvents = "auto";
-    } else {
-      canvas.style.pointerEvents = "none";
+
+    if (!supportsTouch) {
+      if (IO.WantCaptureMouse) {
+        // allow interacting with ImGui and also PokeRogue
+        canvas.style.pointerEvents = "auto";
+      } else {
+        canvas.style.pointerEvents = "none";
+      }
     }
+
 
     window.requestAnimationFrame(done ? _done : _loop);
   }
