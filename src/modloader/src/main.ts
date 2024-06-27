@@ -202,8 +202,8 @@ const startModLoader: () => Promise<boolean> = async () => {
         }
       }
     } else {
-      if (IO.WantCaptureKeyboard && hiddenInput) {
-        hiddenInput.focus()
+      if (IO.WantCaptureKeyboard && hiddenInput && !hiddenInput.matches(':focus')) {
+        hiddenInput.focus({ preventScroll: true })
       }
     }
 
