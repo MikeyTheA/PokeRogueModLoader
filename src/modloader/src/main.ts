@@ -137,6 +137,46 @@ const startModLoader: () => Promise<boolean> = async () => {
       IO.MousePos.y = mousePos.y - rect.top;
     }
 
+    let hiddenInput: undefined | HTMLInputElement
+    if (supportsTouch) {
+      hiddenInput = document.createElement('input');
+      hiddenInput.type = 'text';
+      hiddenInput.id = 'hiddenInput';
+      hiddenInput.style.position = 'absolute';  // Move it off-screen
+      hiddenInput.style.top = '-100px';
+      hiddenInput.style.width = '1px';          // Fix width
+      hiddenInput.style.height = '1px';         // Fix height
+      hiddenInput.style.opacity = '0';          // Make it invisible
+      hiddenInput.style.overflow = 'hidden';    // Prevent overflow
+      document.body.appendChild(hiddenInput);
+
+      function handleKeyEvent(event) {
+        if (event.type === 'keydown' || event.type === 'keyup') {
+          const keyIndex = event.key.charCodeAt(0);
+          IO.KeysDown[keyIndex] = event.type === 'keydown';
+
+          // Handle modifier keys
+          IO.KeyCtrl = event.ctrlKey;
+          IO.KeyShift = event.shiftKey;
+          IO.KeyAlt = event.altKey;
+          IO.KeySuper = event.metaKey;
+        }
+
+        // Handle character input
+        if (event.type === 'input') {
+          const inputValue = hiddenInput.value;
+          for (let i = 0; i < inputValue.length; i++) {
+            IO.AddInputCharacter(inputValue.charCodeAt(i));
+          }
+          hiddenInput.value = '';
+        }
+      }
+
+      hiddenInput.addEventListener('input', handleKeyEvent);
+      hiddenInput.addEventListener('keydown', handleKeyEvent);
+      hiddenInput.addEventListener('keyup', handleKeyEvent);
+    }
+
     ImGui_Impl.NewFrame(time);
     ImGui.NewFrame();
 
@@ -160,6 +200,10 @@ const startModLoader: () => Promise<boolean> = async () => {
         } else {
           battleScene.input.keyboard.enabled = true;
         }
+      }
+    } else {
+      if (IO.WantCaptureKeyboard && hiddenInput) {
+        hiddenInput.focus()
       }
     }
 
