@@ -12,7 +12,6 @@ export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
 export const modsHandler = new ModsHandler();
 export const externalHandler = new ExternalHandler(5828);
-export const supportsTouch = 'ontouchstart' in window;
 
 const startModLoader: () => Promise<boolean> = async () => {
   LoaderData.setData("Amount", LoaderData.getData("Amount", 0, false) + 1, false);
@@ -24,7 +23,7 @@ const startModLoader: () => Promise<boolean> = async () => {
   initServer();
   await ImGui.default();
   const canvas: HTMLCanvasElement = document.getElementById("ImGuiCanvas") as HTMLCanvasElement;
-
+  canvas.style.pointerEvents = "none";
   const resize = () => {
     const devicePixelRatio = window.devicePixelRatio || 1;
     canvas.width = canvas.scrollWidth * devicePixelRatio;
@@ -90,6 +89,7 @@ const startModLoader: () => Promise<boolean> = async () => {
 
   function _loop(time: number) {
     const battleScene = getBattleScene();
+    const supportsTouch = (battleScene as BattleScene).enableTouchControls
     if (LoaderData.getData("phaseHooksDone", false, false) === false && battleScene && battleScene.pushPhase) {
       const originalPushPhase = battleScene.pushPhase;
       const originalUnshiftPhase = battleScene.unshiftPhase;

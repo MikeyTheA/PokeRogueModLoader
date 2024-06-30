@@ -48,6 +48,11 @@ export const showModBrowser = () => {
       const modData = LoaderData.getData(`modbrowser|moddata${selectedMod.name}${selectedMod.author}`, undefined, false);
 
       if (modData) {
+        if (modData.status === 400) {
+          ImGui.Text(modData.message)
+          return
+        }
+
         ImGui.Text("URL: ");
         ImGui.SameLine();
         if (ImGui.SmallButton(modData.url)) {
@@ -99,7 +104,7 @@ export const showModBrowser = () => {
         }
       } else {
         ImGui.Text("Downloading mod information");
-        requestInformation(`/mod?name=${selectedMod.name}&author=${selectedMod.author}`, `modbrowser|moddata${selectedMod.name}${selectedMod.author}`, true);
+        requestInformation(`/mod?name=${selectedMod.name}&author=${selectedMod.author}`, `modbrowser|moddata${selectedMod.name}${selectedMod.author}`, true, true);
       }
 
       ImGui.EndChild();
