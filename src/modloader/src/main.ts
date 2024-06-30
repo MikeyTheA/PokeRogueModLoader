@@ -151,6 +151,7 @@ const startModLoader: () => Promise<boolean> = async () => {
       document.body.appendChild(hiddenInput);
 
       function handleKeyEvent(event) {
+        console.log(event)
         if (event.type === 'keydown' || event.type === 'keyup') {
           const keyIndex = event.key.charCodeAt(0);
           IO.KeysDown[keyIndex] = event.type === 'keydown';
