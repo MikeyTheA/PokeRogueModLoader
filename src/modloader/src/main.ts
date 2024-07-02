@@ -7,6 +7,7 @@ import { ModsHandler } from "./mod";
 import BattleScene from "../../battle-scene";
 import { showModBrowser } from "./modBrowser";
 import { initServer, showServerBrowser } from "./serverBrowser";
+import { hasTouchscreen } from "../../touch-controls";
 
 export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
@@ -23,7 +24,6 @@ const startModLoader: () => Promise<boolean> = async () => {
   initServer();
   await ImGui.default();
   const canvas: HTMLCanvasElement = document.getElementById("ImGuiCanvas") as HTMLCanvasElement;
-  canvas.style.pointerEvents = "none";
   const resize = () => {
     const devicePixelRatio = window.devicePixelRatio || 1;
     canvas.width = canvas.scrollWidth * devicePixelRatio;
@@ -84,12 +84,13 @@ const startModLoader: () => Promise<boolean> = async () => {
   modsHandler.load();
   externalHandler.connect();
 
+  let hiddenInput: undefined | HTMLInputElement
 
   window.requestAnimationFrame(_loop);
 
   function _loop(time: number) {
     const battleScene = getBattleScene();
-    const supportsTouch = (battleScene as BattleScene).enableTouchControls
+    const supportsTouch = hasTouchscreen()
     if (LoaderData.getData("phaseHooksDone", false, false) === false && battleScene && battleScene.pushPhase) {
       const originalPushPhase = battleScene.pushPhase;
       const originalUnshiftPhase = battleScene.unshiftPhase;
@@ -137,8 +138,7 @@ const startModLoader: () => Promise<boolean> = async () => {
       IO.MousePos.y = mousePos.y - rect.top;
     }
 
-    let hiddenInput: undefined | HTMLInputElement
-    if (supportsTouch) {
+    if (supportsTouch && hiddenInput === undefined) {
       hiddenInput = document.createElement('input');
       hiddenInput.type = 'text';
       hiddenInput.id = 'hiddenInput';
@@ -153,14 +153,29 @@ const startModLoader: () => Promise<boolean> = async () => {
       function handleKeyEvent(event) {
         console.log(event)
         if (event.type === 'keydown' || event.type === 'keyup') {
-          const keyIndex = event.key.charCodeAt(0);
-          IO.KeysDown[keyIndex] = event.type === 'keydown';
+          const keyCode = event.keyCode || event.which;
+          IO.KeysDown[keyCode] = event.type === 'keydown';
 
           // Handle modifier keys
           IO.KeyCtrl = event.ctrlKey;
           IO.KeyShift = event.shiftKey;
           IO.KeyAlt = event.altKey;
           IO.KeySuper = event.metaKey;
+
+          // Handle special keys on keydown
+          if (event.type === 'keydown') {
+            switch (keyCode) {
+              case 8:  // Backspace
+                IO.AddInputCharacter(8);
+                break;
+              case 13: // Enter
+                IO.AddInputCharacter(13);
+                break;
+              case 9:  // Tab
+                IO.AddInputCharacter(9);
+                break;
+            }
+          }
         }
 
         // Handle character input
@@ -203,7 +218,8 @@ const startModLoader: () => Promise<boolean> = async () => {
         }
       }
     } else {
-      if (IO.WantCaptureKeyboard && hiddenInput && !hiddenInput.matches(':focus')) {
+      if (IO.WantTextInput && hiddenInput && !hiddenInput.matches(':focus')) {
+        console.log("focused")
         hiddenInput.focus({ preventScroll: true })
       }
     }
