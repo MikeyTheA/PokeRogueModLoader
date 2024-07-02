@@ -177,6 +177,7 @@ class Script {
         }));
       },
       PokeRogue: PokeRogue,
+      Phaser: Phaser,
       getWindowOpenAccess: (windowName: string) => {
         const window = windowHandler.Windows.find(window => window.name === windowName && window.identifier === `${this.id}|${windowName}`)
         if (window) {
