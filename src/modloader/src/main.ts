@@ -8,6 +8,7 @@ import BattleScene from "../../battle-scene";
 import { showModBrowser } from "./modBrowser";
 import { initServer, showServerBrowser } from "./serverBrowser";
 import { hasTouchscreen } from "../../touch-controls";
+import { LoginPhase } from "#app/phases.js";
 
 export const LoaderData = new StaticManager();
 LoaderData.loadPersistentData();
@@ -207,7 +208,14 @@ const startModLoader: () => Promise<boolean> = async () => {
     gl && gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl && gl.clear(gl.COLOR_BUFFER_BIT);
 
-    ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
+    if (supportsTouch) {
+      if (!(battleScene && (battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase)) {
+        ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
+      }
+    } else {
+      ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
+    }
+
 
     if (!supportsTouch) {
       if (battleScene && battleScene.input) {
@@ -231,6 +239,14 @@ const startModLoader: () => Promise<boolean> = async () => {
         canvas.style.pointerEvents = "auto";
       } else {
         canvas.style.pointerEvents = "none";
+      }
+    }
+
+    if (supportsTouch && battleScene) {
+      if ((battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase) {
+        canvas.style.pointerEvents = "none";
+      } else {
+        canvas.style.pointerEvents = "auto";
       }
     }
 
