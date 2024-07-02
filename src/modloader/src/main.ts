@@ -209,7 +209,7 @@ const startModLoader: () => Promise<boolean> = async () => {
     gl && gl.clear(gl.COLOR_BUFFER_BIT);
 
     if (supportsTouch) {
-      if (!(battleScene && (battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase)) {
+      if (!(battleScene && battleScene.getCurrentPhase && (battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase)) {
         ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
       }
     } else {
@@ -242,11 +242,11 @@ const startModLoader: () => Promise<boolean> = async () => {
       }
     }
 
-    if (supportsTouch && battleScene) {
+    if (supportsTouch && battleScene && battleScene.getCurrentPhase) {
       if ((battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase) {
-        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "-100";
       } else {
-        canvas.style.pointerEvents = "auto";
+        canvas.style.zIndex = "1";
       }
     }
 
