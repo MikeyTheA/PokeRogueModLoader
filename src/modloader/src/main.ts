@@ -245,8 +245,10 @@ const startModLoader: () => Promise<boolean> = async () => {
     if (supportsTouch && battleScene && battleScene.getCurrentPhase) {
       if ((battleScene as BattleScene).getCurrentPhase() instanceof LoginPhase) {
         canvas.style.zIndex = "-100";
+        canvas.style.pointerEvents = "none";
       } else {
         canvas.style.zIndex = "1";
+        canvas.style.pointerEvents = "auto";
       }
     }
 
