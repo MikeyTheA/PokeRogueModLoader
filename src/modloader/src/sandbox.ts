@@ -5,8 +5,16 @@ export class Sandbox {
 
   constructor(env: any = {}) {
     this.iframe = document.createElement("iframe");
-    this.iframe.style.display = "none";
-    this.iframe.src = "about:blank";
+    //this.iframe.style.display = "none";
+    this.iframe.style.width = "100%";
+    this.iframe.style.height = "100%";
+    this.iframe.style.position = "fixed";
+    this.iframe.style.left = "0px";
+    this.iframe.style.top = "0px";
+    this.iframe.style.border = "none";
+    this.iframe.style.backgroundColor = "transparent"
+    this.iframe.style.pointerEvents = "none";
+    this.iframe.style.zIndex = "1";
     this.env = env;
     document.body.appendChild(this.iframe);
 
@@ -17,7 +25,20 @@ export class Sandbox {
   }
 
   clearEnv() {
-    const whitelisted = [0, "location", "eval", "Object", "String", "Number", "Bigint", "boolean", "Undefined", "Null", "Symbol", "Math", "NaN", "Iterator", "isFinite", "isNaN", "JSON", "Map", "Infinity", "Date", "BigInt", "Array", "Function", "parseFloat", "parseInt", "Promise", "Set", "undefined"];
+    this.sandboxWindow.document.open();
+    this.sandboxWindow.document.write(`
+      <html>
+        <head>
+          <style>
+            body { margin: 0; padding: 0; background-color: transparent; }
+          </style>
+        </head>
+        <body></body>
+      </html>
+    `);
+    this.sandboxWindow.document.close();
+
+    const whitelisted = [0, "location", "eval", "Object", "String", "Number", "Bigint", "boolean", "Undefined", "Null", "Symbol", "Math", "NaN", "Iterator", "isFinite", "isNaN", "JSON", "Map", "Infinity", "Date", "BigInt", "Array", "Function", "parseFloat", "parseInt", "Promise", "Set", "undefined", "document", "Element", "HTMLElement"];
     Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
       if (!whitelisted.includes(key)) {
         try {
@@ -39,7 +60,7 @@ export class Sandbox {
   eval(code: string) {
     try {
       const script = this.sandboxWindow.document.createElement("script");
-      script.innerHTML = `
+      script.textContent = `
                 try{
                     ${code}
                 }catch(e){
@@ -49,7 +70,7 @@ export class Sandbox {
       this.sandboxWindow.document.body.appendChild(script);
     } catch (e) {
       const errorScript = this.sandboxWindow.document.createElement("script");
-      errorScript.innerHTML = "error(e.message)";
+      errorScript.textContent = "error(e.message)";
       this.sandboxWindow.document.body.appendChild(errorScript);
     }
   }
