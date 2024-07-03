@@ -199,8 +199,6 @@ const startModLoader: () => Promise<boolean> = async () => {
 
     windowHandler.renderWindows();
 
-    ImGui.End()
-
     ImGui.EndFrame();
 
     ImGui.Render();
