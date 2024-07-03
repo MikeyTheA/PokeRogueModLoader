@@ -119,20 +119,6 @@ const startModLoader: () => Promise<boolean> = async () => {
       LoaderData.setData("phaseHooksDone", true, false);
     }
 
-    modsHandler.mods.forEach((mod) => {
-      mod.scripts.forEach((script) => {
-        if (script.sandbox.sandboxWindow.update) {
-          try {
-            script.sandbox.sandboxWindow.update();
-          } catch (e) {
-            script.sandbox.sandboxWindow.error(e.message);
-          }
-
-        }
-      });
-    });
-
-
     if (!supportsTouch) {
       const rect = canvas.getBoundingClientRect();
       IO.MousePos.x = mousePos.x - rect.left; // For WantCaptureMouse to work
@@ -198,6 +184,19 @@ const startModLoader: () => Promise<boolean> = async () => {
     ImGui.NewFrame();
 
     windowHandler.renderWindows();
+
+    modsHandler.mods.forEach((mod) => {
+      mod.scripts.forEach((script) => {
+        if (script.sandbox.sandboxWindow.update) {
+          try {
+            script.sandbox.sandboxWindow.update();
+          } catch (e) {
+            script.sandbox.sandboxWindow.error(e.message);
+          }
+
+        }
+      });
+    });
 
     ImGui.EndFrame();
 
