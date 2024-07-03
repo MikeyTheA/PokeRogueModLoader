@@ -184,6 +184,10 @@ class Script {
           return LoaderData.getAccess(`WindowOpenState${this.id}|${windowName}`, window.flags.open, window.flags.persistentOpen)
         }
         return false
+      },
+      getGameCanvasSize: () => {
+        const canvasRect = document.getElementById("app").getElementsByTagName("canvas")[0].getBoundingClientRect();
+        return [canvasRect.left, canvasRect.top]
       }
     });
 
