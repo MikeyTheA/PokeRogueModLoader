@@ -25,8 +25,7 @@ export class Sandbox {
   }
 
   clearEnv() {
-    this.sandboxWindow.document.open();
-    this.sandboxWindow.document.write(`
+    this.sandboxWindow.document.documentElement.innerHTML = `
       <html>
         <head>
           <style>
@@ -35,8 +34,7 @@ export class Sandbox {
         </head>
         <body></body>
       </html>
-    `);
-    this.sandboxWindow.document.close();
+    `
 
     const whitelisted = [0, "location", "eval", "Object", "String", "Number", "Bigint", "boolean", "Undefined", "Null", "Symbol", "Math", "NaN", "Iterator", "isFinite", "isNaN", "JSON", "Map", "Infinity", "Date", "BigInt", "Array", "Function", "parseFloat", "parseInt", "Promise", "Set", "undefined", "document", "Element", "HTMLElement"];
     Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
