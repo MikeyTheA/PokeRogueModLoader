@@ -47,9 +47,10 @@ function generateImportStatements(dir) {
       if (!directoryImports[dirKey]) {
         directoryImports[dirKey] = [];
       }
-      directoryImports[dirKey].push(
-        `${defaultExportName || `ashash${currentNum}`}`
-      );
+      directoryImports[dirKey].push(`${`ashash${currentNum}`}`);
+      if (defaultExportName) {
+        directoryImports[dirKey].push(`${defaultExportName}`);
+      }
     }
   });
 
