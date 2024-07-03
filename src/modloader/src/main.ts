@@ -31,7 +31,7 @@ const startModLoader: () => Promise<boolean> = async () => {
     canvas.height = canvas.scrollHeight * devicePixelRatio;
   };
   resize();
-  window.addEventListener("resize", resize);
+  window.addEventListener("resize", resize)
 
   ImGui.CreateContext();
   ImGui_Impl.Init(canvas);
@@ -45,6 +45,7 @@ const startModLoader: () => Promise<boolean> = async () => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
   });
+  document.addEventListener("mousedown", resize)
 
   windowHandler.addWindow(
     "Server browser",
