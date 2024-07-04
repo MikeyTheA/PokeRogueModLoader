@@ -70,6 +70,7 @@ export class Sandbox {
       "HTMLElement", //
       "WebSocket",   // [WebSocket access for things like OBS overlays and such]
       "fetch",       // [Web access, for accessing things like wikis, bulbapedia etc]
+      "eval",        // [Modception!!]
     ];
     Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
       if (!whitelisted.includes(key)) {
