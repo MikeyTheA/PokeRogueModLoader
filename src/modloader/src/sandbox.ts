@@ -12,7 +12,8 @@ export class Sandbox {
     this.iframe.style.left = "0px";
     this.iframe.style.top = "0px";
     this.iframe.style.border = "none";
-    this.iframe.style.backgroundColor = "transparent"
+    this.iframe.style.backgroundColor = "transparent";
+    this.iframe.style.background = "transparent";
     this.iframe.style.pointerEvents = "none";
     this.iframe.style.zIndex = "1";
     this.env = env;
@@ -29,14 +30,46 @@ export class Sandbox {
       <html>
         <head>
           <style>
-            body { margin: 0; padding: 0; background-color: transparent; }
+            body { margin: 0; padding: 0; }
           </style>
         </head>
         <body></body>
       </html>
-    `
+    `;
 
-    const whitelisted = [0, "location", "eval", "Object", "String", "Number", "Bigint", "boolean", "Undefined", "Null", "Symbol", "Math", "NaN", "Iterator", "isFinite", "isNaN", "JSON", "Map", "Infinity", "Date", "BigInt", "Array", "Function", "parseFloat", "parseInt", "Promise", "Set", "undefined", "document", "Element", "HTMLElement"];
+    const whitelisted = [
+      0,
+      "location",
+      "eval",
+      "Object",
+      "String",
+      "Number",
+      "Bigint",
+      "boolean",
+      "Undefined",
+      "Null",
+      "Symbol",
+      "Math",
+      "NaN",
+      "Iterator",
+      "isFinite",
+      "isNaN",
+      "JSON",
+      "Map",
+      "Infinity",
+      "Date",
+      "BigInt",
+      "Array",
+      "Function",
+      "parseFloat",
+      "parseInt",
+      "Promise",
+      "Set",
+      "undefined",
+      "document",
+      "Element",
+      "HTMLElement",
+    ];
     Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
       if (!whitelisted.includes(key)) {
         try {
