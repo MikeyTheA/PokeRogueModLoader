@@ -22,6 +22,10 @@ const startModLoader: () => Promise<boolean> = async () => {
     return false;
   }
 
+  const lock = document.createElement('meta');
+  lock.name = 'darkreader-lock';
+  document.head.appendChild(lock);
+
   initServer();
   await ImGui.default();
   const canvas: HTMLCanvasElement = document.getElementById("ImGuiCanvas") as HTMLCanvasElement;
