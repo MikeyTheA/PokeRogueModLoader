@@ -38,37 +38,38 @@ export class Sandbox {
     `;
 
     const whitelisted = [
-      0,
-      "location",
-      "eval",
-      "Object",
-      "String",
-      "Number",
-      "Bigint",
-      "boolean",
-      "Undefined",
-      "Null",
-      "Symbol",
-      "Math",
-      "NaN",
-      "Iterator",
-      "isFinite",
-      "isNaN",
-      "JSON",
-      "Map",
-      "Infinity",
-      "Date",
-      "BigInt",
-      "Array",
-      "Function",
-      "parseFloat",
-      "parseInt",
-      "Promise",
-      "Set",
-      "undefined",
-      "document",
-      "Element",
-      "HTMLElement",
+      0,             // [Things needed for basic functionality]
+      "location",    //
+      "Object",      //
+      "String",      //
+      "Number",      //
+      "Bigint",      //
+      "boolean",     //
+      "Undefined",   //
+      "Null",        //
+      "Symbol",      //
+      "Math",        //
+      "NaN",         //
+      "Iterator",    //
+      "isFinite",    //
+      "isNaN",       //
+      "JSON",        //
+      "Map",         //
+      "Infinity",    //
+      "Date",        //
+      "BigInt",      //
+      "Array",       //
+      "Function",    //
+      "parseFloat",  //
+      "parseInt",    //
+      "Promise",     //
+      "Set",         //
+      "undefined",   //
+      "document",    // [Things needed for html functionality]
+      "Element",     //
+      "HTMLElement", //
+      "WebSocket",   // [WebSocket access for things like OBS overlays and such]
+      "fetch",       // [Web access, for accessing things like wikis, bulbapedia etc]
     ];
     Object.getOwnPropertyNames(this.sandboxWindow).forEach((key) => {
       if (!whitelisted.includes(key)) {
