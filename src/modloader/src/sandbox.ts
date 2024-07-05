@@ -68,6 +68,7 @@ export class Sandbox {
 			'document', // [Things needed for html functionality]
 			'Element', //
 			'HTMLElement', //
+			'Error', // [Getting the stack trace]
 			'WebSocket', // [WebSocket access for things like OBS overlays and such]
 			'fetch', // [Web access, for accessing things like wikis, bulbapedia etc]
 			'eval', // [Modception!!]
