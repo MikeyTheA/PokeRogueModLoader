@@ -7,7 +7,7 @@ export const defaultConfig = {
 	clearScreen: false,
 	build: {
 		minify: 'esbuild' as const,
-		sourcemap: false,
+		sourcemap: true,
 	},
 	rollupOptions: {
 		onwarn(warning, warn) {
