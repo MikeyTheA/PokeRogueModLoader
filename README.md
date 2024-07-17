@@ -7,9 +7,11 @@ PokéRogue is a browser based Pokémon fangame heavily inspired by the roguelite
 
 And PokeRogueModLoader is a mod loader for PokéRogue
 
-You can find a running instance of PokeRogueModLoader at [mokerogue.net](https://mokerogue.net/)
+You can find a running instance of PokeRogueModLoader at [mokerogue.net](https://mokerogue.net/), mokerogue.net is in no way affiliated with PokeRogue or [PokeRogue's official website](https://pokerogue.net/)
 
 Join our [Discord](https://discord.com/invite/M8suCFtF7c) for updates and help
+
+# PokeRogueModLoader is not affiliated with PokeRogue
 
 # Contributing
 
