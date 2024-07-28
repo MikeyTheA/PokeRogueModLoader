@@ -6,23 +6,23 @@ import { addWindow } from "./ui-theme";
 import MessageUiHandler from "./message-ui-handler";
 import { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { Tutorial, handleTutorial } from "../tutorial";
-import { updateUserInfo } from "../account";
+import { loggedInUser, updateUserInfo } from "../account";
 import i18next from "i18next";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import BgmBar from "#app/ui/bgm-bar";
 
 enum MenuOptions {
-  GAME_SETTINGS,
-  ACHIEVEMENTS,
-  STATS,
-  VOUCHERS,
-  EGG_LIST,
-  EGG_GACHA,
-  MANAGE_DATA,
-  COMMUNITY,
-  SAVE_AND_QUIT,
-  LOG_OUT
+	GAME_SETTINGS,
+	ACHIEVEMENTS,
+	STATS,
+	VOUCHERS,
+	EGG_LIST,
+	EGG_GACHA,
+	MANAGE_DATA,
+	COMMUNITY,
+	SAVE_AND_QUIT,
+	LOG_OUT,
 }
 
 let wikiUrl = "https://wiki.pokerogue.net/start";
@@ -48,20 +48,19 @@ export default class MenuUiHandler extends MessageUiHandler {
 
   public bgmBar: BgmBar;
 
-
   constructor(scene: BattleScene, mode?: Mode) {
     super(scene, mode);
 
-    this.ignoredMenuOptions = !bypassLogin
-      ? [ ]
-      : [ MenuOptions.LOG_OUT ];
-    this.menuOptions = Utils.getEnumKeys(MenuOptions).map(m => parseInt(MenuOptions[m]) as MenuOptions).filter(m => !this.ignoredMenuOptions.includes(m));
+    this.ignoredMenuOptions = !bypassLogin ? [] : [MenuOptions.LOG_OUT];
+    this.menuOptions = Utils.getEnumKeys(MenuOptions)
+      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .filter((m) => !this.ignoredMenuOptions.includes(m));
   }
 
   setup() {
     const ui = this.getUi();
     // wiki url directs based on languges available on wiki
-    const lang = i18next.resolvedLanguage.substring(0,2);
+    const lang = i18next.resolvedLanguage.substring(0, 2);
     if (["de", "fr", "ko", "zh"].includes(lang)) {
       wikiUrl = `https://wiki.pokerogue.net/${lang}:start`;
     }
@@ -77,7 +76,7 @@ export default class MenuUiHandler extends MessageUiHandler {
 
     this.menuOverlay = new Phaser.GameObjects.Rectangle(this.scene, -1, -1, this.scene.scaledCanvas.width, this.scene.scaledCanvas.height, 0xffffff, 0.3);
     this.menuOverlay.setName("menu-overlay");
-    this.menuOverlay.setOrigin(0,0);
+    this.menuOverlay.setOrigin(0, 0);
     this.menuContainer.add(this.menuOverlay);
 
     const menuMessageText = addTextObject(this.scene, 8, 8, "", TextStyle.WINDOW, { maxLines: 2 });
@@ -85,10 +84,10 @@ export default class MenuUiHandler extends MessageUiHandler {
     menuMessageText.setWordWrapWidth(1224);
     menuMessageText.setOrigin(0, 0);
 
-    this.optionSelectText = addTextObject(this.scene, 0, 0, this.menuOptions.map(o => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"), TextStyle.WINDOW, { maxLines: this.menuOptions.length });
+    this.optionSelectText = addTextObject(this.scene, 0, 0, this.menuOptions.map((o) => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"), TextStyle.WINDOW, { maxLines: this.menuOptions.length });
     this.optionSelectText.setLineSpacing(12);
 
-    this.menuBg = addWindow(this.scene, (this.scene.game.canvas.width / 6) - (this.optionSelectText.displayWidth + 25), 0, this.optionSelectText.displayWidth + 23, (this.scene.game.canvas.height / 6) - 2);
+    this.menuBg = addWindow(this.scene, this.scene.game.canvas.width / 6 - (this.optionSelectText.displayWidth + 25), 0, this.optionSelectText.displayWidth + 23, this.scene.game.canvas.height / 6 - 2);
     this.menuBg.setOrigin(0, 0);
 
     this.optionSelectText.setPositionRelative(this.menuBg, 14, 6);
@@ -122,38 +121,48 @@ export default class MenuUiHandler extends MessageUiHandler {
       ui.revertMode();
       ui.showText(message, null, () => {
         const config: OptionSelectConfig = {
-          options: new Array(5).fill(null).map((_, i) => i).filter(slotFilter).map(i => {
-            return {
-              label: i18next.t("menuUiHandler:slot", {slotNumber: i+1}),
-              handler: () => {
-                callback(i);
-                ui.revertMode();
-                ui.showText(null, 0);
-                return true;
-              }
-            };
-          }).concat([{
-            label: i18next.t("menuUiHandler:cancel"),
-            handler: () => {
-              ui.revertMode();
-              ui.showText(null, 0);
-              return true;
-            }
-          }]),
-          xOffset: 98
+          options: new Array(5)
+            .fill(null)
+            .map((_, i) => i)
+            .filter(slotFilter)
+            .map((i) => {
+              return {
+                label: i18next.t("menuUiHandler:slot", { slotNumber: i + 1 }),
+                handler: () => {
+                  callback(i);
+                  ui.revertMode();
+                  ui.showText(null, 0);
+                  return true;
+                },
+              };
+            })
+            .concat([
+              {
+                label: i18next.t("menuUiHandler:cancel"),
+                handler: () => {
+                  ui.revertMode();
+                  ui.showText(null, 0);
+                  return true;
+                },
+              },
+            ]),
+          xOffset: 98,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
     };
 
-
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:importSession"),
       handler: () => {
-        confirmSlot(i18next.t("menuUiHandler:importSlotSelect"), () => true, slotId => this.scene.gameData.importData(GameDataType.SESSION, slotId));
+        confirmSlot(
+          i18next.t("menuUiHandler:importSlotSelect"),
+          () => true,
+          (slotId) => this.scene.gameData.importData(GameDataType.SESSION, slotId)
+        );
         return true;
       },
-      keepOpen: true
+      keepOpen: true,
     });
 
     manageDataOptions.push({
@@ -163,19 +172,22 @@ export default class MenuUiHandler extends MessageUiHandler {
         Promise.all(
           new Array(5).fill(null).map((_, i) => {
             const slotId = i;
-            return this.scene.gameData.getSession(slotId).then(data => {
+            return this.scene.gameData.getSession(slotId).then((data) => {
               if (data) {
                 dataSlots.push(slotId);
               }
             });
-          })).then(() => {
-          confirmSlot(i18next.t("menuUiHandler:exportSlotSelect"),
-            i => dataSlots.indexOf(i) > -1,
-            slotId => this.scene.gameData.tryExportData(GameDataType.SESSION, slotId));
+          })
+        ).then(() => {
+          confirmSlot(
+            i18next.t("menuUiHandler:exportSlotSelect"),
+            (i) => dataSlots.indexOf(i) > -1,
+            (slotId) => this.scene.gameData.tryExportData(GameDataType.SESSION, slotId)
+          );
         });
         return true;
       },
-      keepOpen: true
+      keepOpen: true,
     });
 
     manageDataOptions.push({
@@ -185,7 +197,7 @@ export default class MenuUiHandler extends MessageUiHandler {
         this.scene.gameData.importData(GameDataType.SYSTEM);
         return true;
       },
-      keepOpen: true
+      keepOpen: true,
     });
 
     manageDataOptions.push(
@@ -195,20 +207,20 @@ export default class MenuUiHandler extends MessageUiHandler {
           this.scene.gameData.tryExportData(GameDataType.SYSTEM);
           return true;
         },
-        keepOpen: true
+        keepOpen: true,
       },
       {
         label: i18next.t("menuUiHandler:cancel"),
         handler: () => {
           this.scene.ui.revertMode();
           return true;
-        }
+        },
       }
     );
 
     this.manageDataConfig = {
       xOffset: 98,
-      options: manageDataOptions
+      options: manageDataOptions,
     };
 
     const communityOptions: OptionSelectItem[] = [
@@ -218,7 +230,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           window.open(wikiUrl, "_blank").focus();
           return true;
         },
-        keepOpen: true
+        keepOpen: true,
       },
       {
         label: "Discord",
@@ -226,7 +238,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           window.open(discordUrl, "_blank").focus();
           return true;
         },
-        keepOpen: true
+        keepOpen: true,
       },
       {
         label: "GitHub",
@@ -234,7 +246,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           window.open(githubUrl, "_blank").focus();
           return true;
         },
-        keepOpen: true
+        keepOpen: true,
       },
       {
         label: "Reddit",
@@ -242,20 +254,20 @@ export default class MenuUiHandler extends MessageUiHandler {
           window.open(redditUrl, "_blank").focus();
           return true;
         },
-        keepOpen: true
+        keepOpen: true,
       },
       {
         label: i18next.t("menuUiHandler:cancel"),
         handler: () => {
           this.scene.ui.revertMode();
           return true;
-        }
-      }
+        },
+      },
     ];
 
     this.communityConfig = {
       xOffset: 98,
-      options: communityOptions
+      options: communityOptions,
     };
 
     this.setCursor(0);
@@ -264,7 +276,6 @@ export default class MenuUiHandler extends MessageUiHandler {
   }
 
   show(args: any[]): boolean {
-
     super.show(args);
 
     this.menuContainer.setVisible(true);
@@ -279,7 +290,6 @@ export default class MenuUiHandler extends MessageUiHandler {
     handleTutorial(this.scene, Tutorial.Menu);
 
     this.bgmBar.toggleBgmBar(true);
-
 
     return true;
   }
@@ -332,6 +342,54 @@ export default class MenuUiHandler extends MessageUiHandler {
         success = true;
         break;
       case MenuOptions.MANAGE_DATA:
+        if (!bypassLogin && !this.manageDataConfig.options.some((o) => o.label === i18next.t("menuUiHandler:linkDiscord") || o.label === i18next.t("menuUiHandler:unlinkDiscord"))) {
+          this.manageDataConfig.options.splice(
+            this.manageDataConfig.options.length - 1,
+            0,
+            {
+              label: loggedInUser.discordId === "" ? i18next.t("menuUiHandler:linkDiscord") : i18next.t("menuUiHandler:unlinkDiscord"),
+              handler: () => {
+                if (loggedInUser?.discordId === "") {
+                  const token = Utils.getCookie(Utils.sessionIdKey);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
+                  const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
+                  const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
+                  window.open(discordUrl, "_self");
+                  return true;
+                } else {
+                  Utils.apiPost("/auth/discord/logout", undefined, undefined, true).then((res) => {
+                    if (!res.ok) {
+                      console.error(`Unlink failed (${res.status}: ${res.statusText})`);
+                    }
+                    updateUserInfo().then(() => this.scene.reset(true, true));
+                  });
+                  return true;
+                }
+              },
+            },
+            {
+              label: loggedInUser?.googleId === "" ? i18next.t("menuUiHandler:linkGoogle") : i18next.t("menuUiHandler:unlinkGoogle"),
+              handler: () => {
+                if (loggedInUser?.googleId === "") {
+                  const token = Utils.getCookie(Utils.sessionIdKey);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
+                  const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+                  const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
+                  window.open(googleUrl, "_self");
+                  return true;
+                } else {
+                  Utils.apiPost("/auth/google/logout", undefined, undefined, true).then((res) => {
+                    if (!res.ok) {
+                      console.error(`Unlink failed (${res.status}: ${res.statusText})`);
+                    }
+                    updateUserInfo().then(() => this.scene.reset(true, true));
+                  });
+                  return true;
+                }
+              },
+            }
+          );
+        }
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
         success = true;
         break;
@@ -344,10 +402,16 @@ export default class MenuUiHandler extends MessageUiHandler {
           success = true;
           if (this.scene.currentBattle.turn > 1) {
             ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-              ui.setOverlayMode(Mode.CONFIRM, () => this.scene.gameData.saveAll(this.scene, true, true, true, true).then(() => this.scene.reset(true)), () => {
-                ui.revertMode();
-                ui.showText(null, 0);
-              }, false, -98);
+              ui.setOverlayMode(
+                Mode.CONFIRM,
+                () => this.scene.gameData.saveAll(this.scene, true, true, true, true).then(() => this.scene.reset(true)),
+                () => {
+                  ui.revertMode();
+                  ui.showText(null, 0);
+                },
+                false,
+                -98
+              );
             });
           } else {
             this.scene.gameData.saveAll(this.scene, true, true, true, true).then(() => this.scene.reset(true));
@@ -359,20 +423,26 @@ export default class MenuUiHandler extends MessageUiHandler {
       case MenuOptions.LOG_OUT:
         success = true;
         const doLogout = () => {
-          Utils.apiFetch("account/logout", true).then(res => {
+          Utils.apiFetch("account/logout", true).then((res) => {
             if (!res.ok) {
               console.error(`Log out failed (${res.status}: ${res.statusText})`);
             }
-            Utils.setCookie(Utils.sessionIdKey, "");
+            Utils.removeCookie(Utils.sessionIdKey);
             updateUserInfo().then(() => this.scene.reset(true, true));
           });
         };
         if (this.scene.currentBattle) {
           ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-            ui.setOverlayMode(Mode.CONFIRM, doLogout, () => {
-              ui.revertMode();
-              ui.showText(null, 0);
-            }, false, -98);
+            ui.setOverlayMode(
+              Mode.CONFIRM,
+              doLogout,
+              () => {
+                ui.revertMode();
+                ui.showText(null, 0);
+              },
+              false,
+              -98
+            );
           });
         } else {
           doLogout();
@@ -381,7 +451,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       }
     } else if (button === Button.CANCEL) {
       success = true;
-      ui.revertMode().then(result => {
+      ui.revertMode().then((result) => {
         if (!result) {
           ui.setMode(Mode.MESSAGE);
         }

@@ -44,3 +44,4 @@ coverage
 src/modloader/src/all-modules.ts
 
 build
+/.vs

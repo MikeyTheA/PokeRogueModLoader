@@ -34,11 +34,6 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 2. Run `node generateImports.js`
 3. Run `npm run start:dev` to locally run the project in `localhost:8000`
 
-#### Linting
-We're using ESLint as our common linter and formatter. It will run automatically during the pre-commit hook but if you would like to manually run it, use the `npm run eslint` script. 
-
-### ❔ FAQ 
-
 ## 🪧 To Do
 Check out [Github Issues](https://github.com/pagefaultgames/pokerogue/issues) to see how you can help us!
 
