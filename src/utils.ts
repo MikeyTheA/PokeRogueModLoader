@@ -553,6 +553,14 @@ export function capitalizeString(str: string, sep: string, lowerFirstChar: boole
   }
   return null;
 }
+
+/**
+ * Returns if an object is null or undefined
+ * @param object
+ */
+export function isNullOrUndefined(object: any): boolean {
+  return null === object || undefined === object;
+}
 export function setApi(url: string) {
   apiUrl = url;
 }
