@@ -39,7 +39,6 @@
 	</style>
 	<link rel="stylesheet" type="text/css" href="./index.css" />
 	<link rel="manifest" href="./manifest.webmanifest">
-	<script type="text/javascript" src="https://app.termly.io/resource-blocker/c5dbfa2f-9723-4c0f-a84b-2895124e851f?autoBlock=on"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
@@ -62,6 +61,11 @@
 </head>
 
 <body>
+	<script type="module" src="https://mokerogue.net/lib/imgui.umd.js"></script>
+	<script type="module" src="https://mokerogue.net/lib/imgui_impl.umd.js"></script>
+	<script type="module" src="https://mokerogue.net/lib/beautify.min.js"></script>
+	<script type="module" src="https://mokerogue.net/lib/prism.js"></script>
+
 	<canvas id="ImGuiCanvas" tabindex="1" style="position:absolute;top:0px;right:0px;width:100%;height:100%;z-index:1;background:transparent;pointer-events:auto;"></canvas>
 
 	<div id="app"></div>
@@ -146,11 +150,6 @@
 
 		</div>
 	</div>
-
-	<script type="module" src="https://mokerogue.net/lib/imgui.umd.js"></script>
-	<script type="module" src="https://mokerogue.net/lib/imgui_impl.umd.js"></script>
-	<script type="module" src="https://mokerogue.net/lib/beautify.min.js"></script>
-	<script type="module" src="https://mokerogue.net/lib/prism.js"></script>
 
 	<script type="module" src="./src/main.ts"></script>
 	<script src="./src/touch-controls.ts" type="module"></script>
