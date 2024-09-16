@@ -1,120 +1,122 @@
 /* Global */
 :root {
-  --color-base: hsl(0, 0%, 55%);
-  --color-light: hsl(0, 0%, 90%);
-  --color-dark: hsl(0, 0%, 10%);
+	--color-base: hsl(0, 0%, 55%);
+	--color-light: hsl(0, 0%, 90%);
+	--color-dark: hsl(0, 0%, 10%);
 }
 
 html {
-  touch-action: none;
+	touch-action: none;
 }
 
 body {
-  margin: 0;
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  background: #484050;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: #484050;
 }
 
 @media (display-mode: fullscreen) {
-  body {
-    background: #000000;
-  }
+	body {
+		background: #000000;
+	}
 }
 
 #app {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 #app > div:first-child {
-  transform-origin: top !important;
+	transform-origin: top !important;
 }
 
-#layout:fullscreen #dpad, #layout:fullscreen {
-  bottom: 6rem;
+#layout:fullscreen #dpad,
+#layout:fullscreen {
+	bottom: 6rem;
 }
 
 input:-internal-autofill-selected {
-  -webkit-background-clip: text;
-  background-clip: text;
+	-webkit-background-clip: text;
+	background-clip: text;
 }
 
 /* Need adjust input font-size */
 input {
-  font-size: 3.2rem;
+	font-size: 3.2rem;
 }
 
 .hidden {
-  display: none !important;
+	display: none !important;
 }
 
-
 input:-internal-autofill-selected {
-  -webkit-background-clip: text;
-  background-clip: text;
+	-webkit-background-clip: text;
+	background-clip: text;
 }
 
 /* Touch Controls: */
 
 #touchControls {
-  --text-shadow-size: 0.65vh;
-  --controls-size: 10vh;
-  --touch-control-opacity: 0.6;
+	--text-shadow-size: 0.65vh;
+	--controls-size: 10vh;
+	--touch-control-opacity: 0.6;
 
-  --controls-padding: 1rem;
+	--controls-padding: 1rem;
 
-  --controls-size-with-padding: calc(var(--controls-size) + var(--controls-padding));
-  --controls-size-with-wide-padding: calc(var(--controls-size) *1.2 + var(--controls-padding));
-  --control-group-extra-size: calc(var(--controls-size) * 0.8);
-  --control-group-extra-wide-size: calc(var(--controls-size) * 1.2);
+	--controls-size-with-padding: calc(var(--controls-size) + var(--controls-padding));
+	--controls-size-with-wide-padding: calc(var(--controls-size) * 1.2 + var(--controls-padding));
+	--control-group-extra-size: calc(var(--controls-size) * 0.8);
+	--control-group-extra-wide-size: calc(var(--controls-size) * 1.2);
 
-  --control-group-extra-2-offset: calc(var(--controls-size-with-padding) + (var(--controls-size) - var(--control-group-extra-size)) / 2);
-  --control-group-extra-1-offset: calc(var(--controls-padding) + (var(--controls-size) - var(--control-group-extra-size)) / 2);
+	--control-group-extra-2-offset: calc(var(--controls-size-with-padding) + (var(--controls-size) - var(--control-group-extra-size)) / 2);
+	--control-group-extra-1-offset: calc(var(--controls-padding) + (var(--controls-size) - var(--control-group-extra-size)) / 2);
 
-  --small-control-size: calc(var(--controls-size) / 3);
-  --rect-control-size: calc(var(--controls-size) * 0.74);
+	--small-control-size: calc(var(--controls-size) / 3);
+	--rect-control-size: calc(var(--controls-size) * 0.74);
 
-  font-family: 'emerald';
-  font-size: var(--controls-size);
-  text-shadow: var(--color-dark) var(--text-shadow-size) var(--text-shadow-size);
-  color: var(--color-light);
+	font-family: 'emerald';
+	font-size: var(--controls-size);
+	text-shadow: var(--color-dark) var(--text-shadow-size) var(--text-shadow-size);
+	color: var(--color-light);
+
+	z-index: 100;
 }
 
 @media (orientation: landscape) {
-  #touchControls {
-    --controls-size: 20vh;
-    --text-shadow-size: 1.3vh;
-    --small-button-offset: 4vh;
-  }
+	#touchControls {
+		--controls-size: 20vh;
+		--text-shadow-size: 1.3vh;
+		--small-button-offset: 4vh;
+	}
 }
 
 #touchControls:not(.visible) {
-  display: none;
+	display: none;
 }
 
 #touchControls .active {
-  opacity: var(--touch-control-opacity);
+	opacity: var(--touch-control-opacity);
 }
 
 .control-group {
-  position: fixed;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  width: var(--controls-size);
+	position: fixed;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	width: var(--controls-size);
 }
 
 .control-group-dpad {
-  width: calc(2 * var(--controls-size));
-  height: calc(2 * var(--controls-size));
+	width: calc(2 * var(--controls-size));
+	height: calc(2 * var(--controls-size));
 }
 
 .control-group-extra {
-  width: var(--control-group-extra-size);
-  height: var(--control-group-extra-size);
+	width: var(--control-group-extra-size);
+	height: var(--control-group-extra-size);
 }
 
 /* Hide buttons on specific UIs */
@@ -124,17 +126,17 @@ input:-internal-autofill-selected {
 #touchControls:not([data-ui-mode^='SETTINGS']) #apadNextTab,
 #touchControls:is(.config-mode) #apadPreviousTab,
 #touchControls:is(.config-mode) #apadNextTab {
-  display: none;
+	display: none;
 }
 
 /* Show #apadInfo only in battle */
 #touchControls:not([data-ui-mode='COMMAND']):not([data-ui-mode='FIGHT']):not([data-ui-mode='BALL']):not([data-ui-mode='TARGET_SELECT']) #apadInfo {
-  display: none;
+	display: none;
 }
 
 /* Show #apadStats only in battle and shop */
 #touchControls:not([data-ui-mode='COMMAND']):not([data-ui-mode='FIGHT']):not([data-ui-mode='BALL']):not([data-ui-mode='TARGET_SELECT']):not([data-ui-mode='MODIFIER_SELECT']) #apadStats {
-  display: none;
+	display: none;
 }
 
 /* Show cycle buttons only on STARTER_SELECT and on touch configuration panel */
@@ -145,237 +147,238 @@ input:-internal-autofill-selected {
 #touchControls:not(.config-mode):not([data-ui-mode='STARTER_SELECT'], [data-ui-mode='RUN_INFO']) #apadCycleAbility,
 #touchControls:not(.config-mode):not([data-ui-mode='STARTER_SELECT']) #apadCycleGender,
 #touchControls:not(.config-mode):not([data-ui-mode='STARTER_SELECT']) #apadCycleVariant {
- display: none;
+	display: none;
 }
 
 /* Configuration toolbar */
 
 #configToolbar {
-  width: 100%;
-  position: fixed;
-  top: 1rem;
-  left: 0;
-  z-index: 9;
-  user-select: none;
+	width: 100%;
+	position: fixed;
+	top: 1rem;
+	left: 0;
+	z-index: 9;
+	user-select: none;
 }
 
 #configToolbar .column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10%;
-  padding: 0 var(--controls-padding);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10%;
+	padding: 0 var(--controls-padding);
 }
 
 #configToolbar .button-row {
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
 }
 
 #configToolbar .info-row {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	width: 100%;
 }
 
 #configToolbar .button {
-  z-index: 3;
-  background-color: var(--color-base);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 10%;
-  height: var(--small-control-size);
-  font-size: var(--small-control-size);
-  border-radius: 8px;
-  padding: 2px 8px;
-  text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
+	z-index: 3;
+	background-color: var(--color-base);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius: 10%;
+	height: var(--small-control-size);
+	font-size: var(--small-control-size);
+	border-radius: 8px;
+	padding: 2px 8px;
+	text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
 }
 
 #configToolbar .button:active {
-  opacity: var(--touch-control-opacity)
+	opacity: var(--touch-control-opacity);
 }
 
 #configToolbar .orientation-label {
-  font-size: var(--small-control-size);
-  text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
+	font-size: var(--small-control-size);
+	text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
 }
 
 /* dpad */
 #dpad {
-  z-index: 3;
-  opacity: 0.8;
+	z-index: 3;
+	opacity: 0.8;
 }
 
 #dpad svg {
-  width: calc(2 * var(--controls-size));
-  height: calc(2 * var(--controls-size));
-  fill: var(--color-base);
+	width: calc(2 * var(--controls-size));
+	height: calc(2 * var(--controls-size));
+	fill: var(--color-base);
 }
 
 /* apad buttons */
 
 .apad-button {
-  background-color: var(--color-base);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 0;
-  bottom: 0;
-  width: var(--controls-size);
-  height: var(--controls-size);
-  opacity: 0.8;
-  border-radius: 8px;
+	background-color: var(--color-base);
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	right: 0;
+	bottom: 0;
+	width: var(--controls-size);
+	height: var(--controls-size);
+	opacity: 0.8;
+	border-radius: 8px;
 }
 
 .apad-small {
-  width: var(--small-control-size);
-  height: var(--small-control-size);
+	width: var(--small-control-size);
+	height: var(--small-control-size);
 }
 
 .apad-label {
-  user-select: none;
-  height: 100%;
-  margin-right: -2px;
+	user-select: none;
+	height: 100%;
+	margin-right: -2px;
 }
 
 .apad-small > .apad-label {
-  font-size: var(--small-control-size);
-  text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
+	font-size: var(--small-control-size);
+	text-shadow: var(--color-dark) calc(var(--text-shadow-size) / 3) calc(var(--text-shadow-size) / 3);
 }
 
 .apad-rectangle {
-  text-align: center;
-  width: var(--rect-control-size);
-  height: var(--small-control-size);
+	text-align: center;
+	width: var(--rect-control-size);
+	height: var(--small-control-size);
 }
 
 .apad-square {
-  width: var(--small-control-size);
-  height: var(--small-control-size);
+	width: var(--small-control-size);
+	height: var(--small-control-size);
 }
 
 .apad-circle {
-  width: var(--controls-size);
-  height: var(--controls-size);
-  border-radius: 50%;
+	width: var(--controls-size);
+	height: var(--controls-size);
+	border-radius: 50%;
 }
 
 /* Defaults:*/
 
 #control-group-dpad {
-  left: var(--controls-padding);
-  bottom: var(--controls-padding);
+	left: var(--controls-padding);
+	bottom: var(--controls-padding);
 }
 
 #control-group-action {
-  right: var(--controls-padding);
-  bottom: var(--controls-size-with-padding);
+	right: var(--controls-padding);
+	bottom: var(--controls-size-with-padding);
 }
 
 #control-group-cancel {
-  right: var(--controls-size-with-wide-padding);
-  bottom: var(--controls-padding);
+	right: var(--controls-size-with-wide-padding);
+	bottom: var(--controls-padding);
 }
 
 #control-group-extra-1 {
-  right: var(--control-group-extra-1-offset);
-  bottom: var(--control-group-extra-1-offset);
+	right: var(--control-group-extra-1-offset);
+	bottom: var(--control-group-extra-1-offset);
 }
 
 #control-group-extra-2 {
-  width: var(--control-group-extra-wide-size);
-  right: var(--control-group-extra-2-offset);
-  bottom: var(--control-group-extra-2-offset);
+	width: var(--control-group-extra-wide-size);
+	right: var(--control-group-extra-2-offset);
+	bottom: var(--control-group-extra-2-offset);
 }
 
 /* Layout */
 
-#layout:fullscreen #dpad, #layout:fullscreen #apad {
-  bottom: 6rem;
+#layout:fullscreen #dpad,
+#layout:fullscreen #apad {
+	bottom: 6rem;
 }
 
 input:-internal-autofill-selected {
-  -webkit-background-clip: text;
-  background-clip: text;
+	-webkit-background-clip: text;
+	background-clip: text;
 }
 #banner {
-  display: none;
-  position: absolute;
-  top: 33.2%;
-  left: 0;
-  text-align: center;
-  z-index: 1000; /* Ensures the banner is on top of other elements */
-  & > img {
-    opacity: 50%;
-  }
+	display: none;
+	position: absolute;
+	top: 33.2%;
+	left: 0;
+	text-align: center;
+	z-index: 1000; /* Ensures the banner is on top of other elements */
+	& > img {
+		opacity: 50%;
+	}
 }
 
 #tnc-links {
-  font-size: xx-small;
-  position: relative;
+	font-size: xx-small;
+	position: relative;
 }
 
 a {
-  color: #328cea;
-  margin-right: 4px;
-  margin-left: 4px;
+	color: #328cea;
+	margin-right: 4px;
+	margin-left: 4px;
 }
 
 /* Firefox old*/
 @-moz-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @-webkit-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 /* IE */
 @-ms-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 /* Opera and prob css3 final iteration */
 @keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 .blink-image {
-    -moz-animation: blink normal 4s infinite ease-in-out; /* Firefox */
-    -webkit-animation: blink normal 4s infinite ease-in-out; /* Webkit */
-    -ms-animation: blink normal 4s infinite ease-in-out; /* IE */
-    animation: blink normal 4s infinite ease-in-out; /* Opera and prob css3 final iteration */
+	-moz-animation: blink normal 4s infinite ease-in-out; /* Firefox */
+	-webkit-animation: blink normal 4s infinite ease-in-out; /* Webkit */
+	-ms-animation: blink normal 4s infinite ease-in-out; /* IE */
+	animation: blink normal 4s infinite ease-in-out; /* Opera and prob css3 final iteration */
 }
