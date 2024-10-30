@@ -2,6 +2,8 @@ import { MoneyFormat } from '#enums/money-format';
 import { Moves } from '#enums/moves';
 import i18next from 'i18next';
 
+export type nil = null | undefined;
+
 export const MissingTextureKey = '__MISSING';
 
 export function toReadableString(str: string): string {
@@ -38,10 +40,6 @@ export function shiftCharCodes(str: string, shiftCount: integer) {
 	}
 
 	return newStr;
-}
-
-export function clampInt(value: integer, min: integer, max: integer): integer {
-	return Math.min(Math.max(value, min), max);
 }
 
 export function randGauss(stdev: number, mean: number = 0): number {
@@ -443,7 +441,7 @@ export function deltaRgb(rgb1: integer[], rgb2: integer[]): integer {
 }
 
 export function rgbHexToRgba(hex: string) {
-	const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i)!; // TODO: is this bang correct?
+	const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ['000000', '00', '00', '00'];
 	return {
 		r: parseInt(color[1], 16),
 		g: parseInt(color[2], 16),
@@ -633,6 +631,10 @@ export function isBetween(num: number, min: number, max: number): boolean {
 	return num >= min && num <= max;
 }
 
+export function setApi(url: string) {
+	apiUrl = url;
+}
+
 /**
  * Helper method to return the animation filename for a given move
  *
@@ -641,6 +643,13 @@ export function isBetween(num: number, min: number, max: number): boolean {
 export function animationFileName(move: Moves): string {
 	return Moves[move].toLowerCase().replace(/\_/g, '-');
 }
-export function setApi(url: string) {
-	apiUrl = url;
+/**
+ * Transforms a camelCase string into a kebab-case string
+ * @param str The camelCase string
+ * @returns A kebab-case string
+ *
+ * @source {@link https://stackoverflow.com/a/67243723/}
+ */
+export function camelCaseToKebabCase(str: string): string {
+	return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, (s, o) => (o ? '-' : '') + s.toLowerCase());
 }
